@@ -342,7 +342,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Evento de Botón Físico Home
+    // Función para cerrar la app actual (Zoom Out clásico)
+    function closeCurrentApp() {
+        if (currentOpenAppId) {
+            const appWin = document.getElementById(currentOpenAppId);
+            if (appWin) {
+                appWin.style.animation = "appZoomOut 0.25s cubic-bezier(0.34, 0, 0.64, 1) both";
+                setTimeout(() => {
+                    appWin.classList.add("hidden");
+                }, 250);
+            }
+            currentOpenAppId = null;
+        }
+    }
+
+    // Agregar evento a los botones "🏠 Home" en las cabeceras de las apps
+    document.querySelectorAll(".home-back-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Evitar comportamientos extraños
+            initAudioContext();
+            playClickSound();
+            closeCurrentApp();
+        });
+    });
+
+    // Evento de Botón Físico Home (Para pantallas de Desktop)
     if (homeButton) {
         homeButton.addEventListener("click", () => {
             initAudioContext();
@@ -350,19 +374,9 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Si la pantalla de bloqueo está oculta y hay app abierta, volvemos al Home
             if (currentOpenAppId) {
-                const appWin = document.getElementById(currentOpenAppId);
-                if (appWin) {
-                    // Animación de Zoom out al cerrar
-                    appWin.style.animation = "appZoomOut 0.25s cubic-bezier(0.34, 0, 0.64, 1) both";
-                    setTimeout(() => {
-                        appWin.classList.add("hidden");
-                    }, 250);
-                }
-                currentOpenAppId = null;
-                
-                // Si la música está sonando en el iPod, no la detenemos para simular multitarea clásica de iOS!
+                closeCurrentApp();
             } else if (homeScreen.classList.contains("hidden")) {
-                // Si no hay app y estamos bloqueados, no hace nada, o despierta la pantalla
+                // Si no hay app y estamos bloqueados, despierta la pantalla
             }
         });
     }

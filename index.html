@@ -176,6 +176,7 @@
             <div class="ios-app-window hidden" id="app-ipod">
                 <!-- Header Plateado de iOS 6 -->
                 <div class="app-header">
+                    <button class="ios-btn home-back-btn" style="margin-right: 4px;">🏠 Home</button>
                     <button class="ios-btn back-btn text-btn hidden" id="ipod-back-btn">Atrás</button>
                     <h2 class="app-title" id="ipod-header-title">iPod</h2>
                     <button class="ios-btn right-btn" id="ipod-list-toggle">Canciones</button>
@@ -239,7 +240,9 @@
             <!-- APP B: YOUTUBE (El Televisor de Madera) -->
             <div class="ios-app-window hidden" id="app-youtube">
                 <div class="app-header">
+                    <button class="ios-btn home-back-btn">🏠 Home</button>
                     <h2 class="app-title">YouTube</h2>
+                    <div style="width: 50px;"></div>
                 </div>
                 <div class="app-content tv-wooden-content">
                     <!-- Televisor Skeuomórfico Clásico -->
@@ -287,7 +290,9 @@
             <!-- APP C: FOTOS (Galería & Lightbox) -->
             <div class="ios-app-window hidden" id="app-photos">
                 <div class="app-header">
+                    <button class="ios-btn home-back-btn">🏠 Home</button>
                     <h2 class="app-title">Carrete</h2>
+                    <div style="width: 50px;"></div>
                 </div>
                 <div class="app-content photos-grid-content">
                     <div class="photos-album-title">Fotos de Eventos</div>
@@ -317,7 +322,8 @@
             <!-- APP D: SAFARI (Redes Sociales & Links) -->
             <div class="ios-app-window hidden" id="app-safari">
                 <!-- Barra de Direcciones Clásica de iOS 6 -->
-                <div class="safari-address-bar">
+                <div class="safari-address-bar" style="display: flex; gap: 6px; align-items: center;">
+                    <button class="ios-btn home-back-btn" style="height: 32px; padding: 0 8px;">🏠 Home</button>
                     <div class="safari-address-input-wrapper">
                         <span class="safari-lock-icon">🔒</span>
                         <input type="text" class="safari-url-input" value="https://luvalenzueladj.com/links" readonly>
@@ -381,7 +387,9 @@
             <div class="ios-app-window hidden" id="app-notes">
                 <!-- Header de Notas con Cuero -->
                 <div class="app-header notes-header">
+                    <button class="ios-btn home-back-btn" style="background: linear-gradient(to bottom, #d69830 0%, #b37318 100%); border-color: #804f0d;">🏠 Home</button>
                     <h2 class="app-title font-marker">Notas</h2>
+                    <div style="width: 50px;"></div>
                 </div>
                 
                 <!-- Bloc de Notas Amarillo Lino Rayado -->
@@ -416,9 +424,13 @@
             <!-- APP F: TELÉFONO (Booking & Press Kit Download) -->
             <div class="ios-app-window hidden" id="app-phone">
                 <!-- Selector de pestañas clásico de iOS 6 -->
-                <div class="phone-tabs-header">
-                    <button class="phone-tab-btn active" data-tab="tab-keypad">Teclado</button>
-                    <button class="phone-tab-btn" data-tab="tab-contacts">Booking</button>
+                <div class="phone-tabs-header" style="justify-content: space-between; gap: 8px;">
+                    <button class="ios-btn home-back-btn" style="height: 28px; background: linear-gradient(to bottom, #9ea3ac 0%, #6f747d 100%); border-color: #4a4f56;">🏠 Home</button>
+                    <div style="display: flex; gap: 8px; flex-grow: 1; justify-content: center; max-width: 220px;">
+                        <button class="phone-tab-btn active" data-tab="tab-keypad" style="max-width: 90px;">Teclado</button>
+                        <button class="phone-tab-btn" data-tab="tab-contacts" style="max-width: 90px;">Booking</button>
+                    </div>
+                    <div style="width: 52px; display: inline-block;"></div>
                 </div>
                 
                 <div class="app-content phone-content">
@@ -464,15 +476,15 @@
                         <div class="contact-details-table">
                             <div class="contact-row">
                                 <span class="label">Móvil Booking</span>
-                                <a href="tel:+34600000000" class="value link-value" id="btn-call-booking">+34 600 000 000</a>
+                                <a href="tel:+5218123997318" class="value link-value" id="btn-call-booking">+52 1 81 2399 7318</a>
                             </div>
                             <div class="contact-row">
                                 <span class="label">Email Contrataciones</span>
-                                <a href="mailto:booking@luvalenzueladj.com" class="value link-value">booking@luvalenzueladj.com</a>
+                                <a href="mailto:lucas_v_r@hotmail.com" class="value link-value">lucas_v_r@hotmail.com</a>
                             </div>
                             <div class="contact-row">
                                 <span class="label">Ciudad Base</span>
-                                <span class="value">Madrid, España</span>
+                                <span class="value">Monterrey, Nuevo León</span>
                             </div>
                         </div>
 
