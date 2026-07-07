@@ -1902,23 +1902,29 @@ body {
    ========================================================================== */
 
 @media (max-width: 480px), (max-height: 850px) {
-    body {
-        background: #000;
-        padding: 0;
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
+    html, body {
+        height: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: #000 !important;
     }
     
     .iphone-device-frame {
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        border-radius: 0;
-        padding: 0;
-        box-shadow: none;
-        border: none;
-        overflow: hidden;
+        width: 100vw !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
     }
     
     .iphone-top-hardware, 
@@ -1927,11 +1933,39 @@ body {
     }
     
     .iphone-screen-viewport {
-        border-radius: 0;
-        border: none;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
+        border-radius: 0 !important;
+        border: none !important;
+        height: 100% !important;
+        width: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Evitar que las barras de navegación del navegador empujen o corten el contenido */
+    .ios-home-screen {
+        height: calc(100% - 20px) !important;
+        padding: 8px 12px !important;
+    }
+
+    .ios-lock-screen {
+        height: 100% !important;
+        padding: 20px 10px 30px 10px !important;
+    }
+
+    /* Ajuste de notificaciones y slider de bloqueo para móviles */
+    .push-notifications-container {
+        margin-top: -30px !important;
+        gap: 6px !important;
+    }
+
+    .slide-to-unlock-container {
+        height: 68px !important;
+        padding: 4px !important;
+    }
+
+    .slide-handle {
+        height: 48px !important;
     }
 
     /* Optimización de espacios para iconos en móviles */
@@ -1941,8 +1975,8 @@ body {
     }
 
     .app-icon {
-        width: 54px;
-        height: 54px;
+        width: 52px;
+        height: 52px;
         border-radius: 11px;
     }
 
@@ -1951,39 +1985,84 @@ body {
     }
 
     .ios-dock-container {
-        padding-bottom: 12px;
+        padding-bottom: 8px;
     }
 
     .dock-shelf {
-        height: 32px;
-        bottom: 8px;
+        height: 28px;
+        bottom: 6px;
     }
 
     .app-icon-reflection {
-        width: 54px;
-        height: 20px;
-        bottom: -22px;
+        width: 52px;
+        height: 18px;
+        bottom: -20px;
+    }
+
+    /* Ajustar cabecera de las ventanas de apps para celulares */
+    .app-header {
+        height: 38px !important;
+    }
+
+    .app-title {
+        font-size: 15px !important;
+    }
+
+    .ios-btn {
+        height: 24px !important;
+        font-size: 10px !important;
+        padding: 0 8px !important;
     }
 
     /* Reducir altura del reproductor iPod en móviles muy pequeños para evitar scroll */
     .album-art-container {
-        width: 140px;
-        height: 140px;
+        width: 120px !important;
+        height: 120px !important;
+        margin-bottom: 2px !important;
     }
     .album-cover-img {
-        width: 76px;
-        height: 76px;
-        top: 32px;
-        left: 32px;
+        width: 66px !important;
+        height: 66px !important;
+        top: 27px !important;
+        left: 27px !important;
+    }
+    .song-metadata {
+        margin: 2px 0 !important;
+    }
+    .song-title {
+        font-size: 15px !important;
+    }
+    .song-artist {
+        font-size: 11px !important;
+    }
+    .volume-slider-container {
+        padding-top: 4px !important;
     }
     
     .classic-tv-container {
-        max-width: 290px;
+        max-width: 280px;
     }
     .tv-inner-screen {
-        height: 110px;
+        height: 100px;
     }
     .tv-controls-panel {
-        height: 110px;
+        height: 100px;
+    }
+    .tv-description-plate {
+        margin-top: 8px !important;
+        padding: 6px !important;
+    }
+
+    /* Notas en móvil */
+    .notes-paper-content {
+        padding: 10px !important;
+        margin-left: 20px !important;
+    }
+    .note-paragraph {
+        font-size: 12px !important;
+        line-height: 18px !important;
+    }
+    .note-bio-title {
+        font-size: 16px !important;
     }
 }
