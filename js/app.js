@@ -718,34 +718,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================================================
-    // 7. APP DE FOTOS (Carrete y Lightbox interactivo)
+    // 7. APP DE FOTOS (Carrete, Álbumes y Lightbox interactivo)
     // ==========================================================================
     
-    // Lista de tus fotos reales de eventos
+    // Álbum 1: Fotos reales de eventos
     const eventPhotos = [
-        {
-            src: "photos/A7409555.jpg",
-            caption: "Presentación en Vivo - Sunset Session"
-        },
-        {
-            src: "photos/A7409646.jpg",
-            caption: "Cabina DJ - Close Up"
-        },
-        {
-            src: "photos/A7409733.jpg",
-            caption: "Energy in the Crowd - Club Night"
-        },
-        {
-            src: "photos/0E8A7135.JPG",
-            caption: "Lu Valenzuela - Retrato de Prensa"
-        },
-        {
-            src: "photos/0E8A7139.JPG",
-            caption: "Sunset Festival Stage"
-        }
+        { src: "photos/A7409555.jpg", caption: "Presentación en Vivo - Sunset Session" },
+        { src: "photos/A7409646.jpg", caption: "Cabina DJ - Close Up" },
+        { src: "photos/A7409733.jpg", caption: "Energy in the Crowd - Club Night" },
+        { src: "photos/0E8A7135.JPG", caption: "Lu Valenzuela - Retrato de Prensa" },
+        { src: "photos/0E8A7139.JPG", caption: "Sunset Festival Stage" }
     ];
 
+    // Álbum 2: Gigs (Screenshots de Instagram)
+    const gigsPhotos = [
+        { src: "photos/gigs/Screenshot_20260707_134034_Instagram.jpg", caption: "Gig de Instagram @luvalenzueladj" },
+        { src: "photos/gigs/Screenshot_20260707_134036_Instagram.jpg", caption: "Live Mix Promo" },
+        { src: "photos/gigs/Screenshot_20260707_134046_Instagram.jpg", caption: "Club Set - Monterrey Sessions" },
+        { src: "photos/gigs/Screenshot_20260707_134049_Instagram.jpg", caption: "Event Gig Poster" },
+        { src: "photos/gigs/Screenshot_20260707_134054_Instagram.jpg", caption: "Live at Sunset Terrace" },
+        { src: "photos/gigs/Screenshot_20260707_134059_Instagram.jpg", caption: "Special Tech House Release" },
+        { src: "photos/gigs/Screenshot_20260707_134102_Instagram.jpg", caption: "Live Sound Check" },
+        { src: "photos/gigs/Screenshot_20260707_134105_Instagram.jpg", caption: "Nightclub Mainroom" },
+        { src: "photos/gigs/Screenshot_20260707_134109_Instagram.jpg", caption: "Gig Promo Feed" },
+        { src: "photos/gigs/Screenshot_20260707_134112_Instagram.jpg", caption: "Monochrome Vibes" },
+        { src: "photos/gigs/Screenshot_20260707_134117_Instagram.jpg", caption: "Warehouse Rave Crowd" },
+        { src: "photos/gigs/Screenshot_20260707_134140_Instagram.jpg", caption: "Club Deck Session" },
+        { src: "photos/gigs/Screenshot_20260707_134143_Instagram.jpg", caption: "Groove & Bass Tech" },
+        { src: "photos/gigs/Screenshot_20260707_134150_Instagram.jpg", caption: "Visuals and Sound Stage" },
+        { src: "photos/gigs/Screenshot_20260707_134153_Instagram.jpg", caption: "Outdoor Mainstage festival" },
+        { src: "photos/gigs/Screenshot_20260707_134156_Instagram.jpg", caption: "Mixing Deck Controls" },
+        { src: "photos/gigs/Screenshot_20260707_134200_Instagram.jpg", caption: "Rhythm & Lights Show" },
+        { src: "photos/gigs/Screenshot_20260707_134213_Instagram.jpg", caption: "Weekend Gig Poster" },
+        { src: "photos/gigs/Screenshot_20260707_134217_Instagram.jpg", caption: "Terrace Sunset Beats" },
+        { src: "photos/gigs/Screenshot_20260707_134224_Instagram.jpg", caption: "Tech House Mix Recording" },
+        { src: "photos/gigs/Screenshot_20260707_134227_Instagram.jpg", caption: "Festival Sound System" },
+        { src: "photos/gigs/Screenshot_20260707_134234_Instagram.jpg", caption: "Lu Valenzuela Dj Set" }
+    ];
+
+    const photosAlbumsView = document.getElementById("photos-albums-view");
+    const photosGridView = document.getElementById("photos-grid-view");
     const photosGrid = document.getElementById("photos-grid");
+    const photosGridAlbumTitle = document.getElementById("photos-grid-album-title");
+    
+    // Referencias de Cabecera en Fotos
+    const photosHomeBtn = document.getElementById("photos-home-btn");
+    const photosAlbumBackBtn = document.getElementById("photos-album-back-btn");
+    const photosHeaderTitle = document.getElementById("photos-header-title");
+    const photosHeaderSpacer = document.getElementById("photos-header-spacer");
+
+    // Referencias del Lightbox
     const photoLightbox = document.getElementById("photo-lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
     const lightboxCounter = document.getElementById("lightbox-counter");
@@ -755,10 +777,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightboxNext = document.getElementById("lightbox-next");
 
     let currentPhotoIdx = 0;
+    let activePhotoset = []; // Apuntará dinámicamente a eventPhotos o a gigsPhotos
 
-    // Renderizar fotos en el Grid
-    if (photosGrid) {
-        eventPhotos.forEach((photo, i) => {
+    // Manejar clics en las carpetas de álbumes
+    document.querySelectorAll(".album-folder-card").forEach(card => {
+        card.addEventListener("click", () => {
+            initAudioContext();
+            playClickSound();
+
+            const albumId = card.getAttribute("data-album-id");
+            if (albumId === "album-events") {
+                activePhotoset = eventPhotos;
+                photosGridAlbumTitle.textContent = "Fotos";
+                photosHeaderTitle.textContent = "Fotos";
+            } else if (albumId === "album-gigs") {
+                activePhotoset = gigsPhotos;
+                photosGridAlbumTitle.textContent = "Gigs";
+                photosHeaderTitle.textContent = "Gigs";
+            }
+
+            renderPhotosGrid(activePhotoset);
+
+            // Transición de Vista: Ocultar álbumes, mostrar rejilla
+            photosAlbumsView.classList.add("hidden");
+            photosGridView.classList.remove("hidden");
+
+            // Ajustar botones del Header
+            photosHomeBtn.classList.add("hidden");
+            photosAlbumBackBtn.classList.remove("hidden");
+            photosHeaderSpacer.style.width = "0px";
+        });
+    });
+
+    // Botón para retroceder de la Rejilla a la vista de Álbumes
+    if (photosAlbumBackBtn) {
+        photosAlbumBackBtn.addEventListener("click", () => {
+            initAudioContext();
+            playClickSound();
+
+            // Transición de Vista: Ocultar rejilla, mostrar álbumes
+            photosGridView.classList.add("hidden");
+            photosAlbumsView.classList.remove("hidden");
+
+            // Restaurar botones del Header
+            photosAlbumBackBtn.classList.add("hidden");
+            photosHomeBtn.classList.remove("hidden");
+            photosHeaderTitle.textContent = "Álbumes";
+            photosHeaderSpacer.style.width = "52px";
+        });
+    }
+
+    // Renderizar la rejilla de miniaturas
+    function renderPhotosGrid(photoset) {
+        photosGrid.innerHTML = "";
+        photoset.forEach((photo, i) => {
             const wrapper = document.createElement("div");
             wrapper.className = "photo-thumb-wrapper";
             wrapper.innerHTML = `<img src="${photo.src}" alt="${photo.caption}">`;
@@ -779,10 +851,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateLightbox() {
-        const photo = eventPhotos[currentPhotoIdx];
+        if (!activePhotoset.length) return;
+        const photo = activePhotoset[currentPhotoIdx];
         lightboxImg.src = photo.src;
         lightboxCaption.textContent = photo.caption;
-        lightboxCounter.textContent = `${currentPhotoIdx + 1} de ${eventPhotos.length}`;
+        lightboxCounter.textContent = `${currentPhotoIdx + 1} de ${activePhotoset.length}`;
     }
 
     if (lightboxClose) {
@@ -798,7 +871,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initAudioContext();
             playClickSound();
             currentPhotoIdx--;
-            if (currentPhotoIdx < 0) currentPhotoIdx = eventPhotos.length - 1;
+            if (currentPhotoIdx < 0) currentPhotoIdx = activePhotoset.length - 1;
             updateLightbox();
         });
     }
@@ -808,7 +881,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initAudioContext();
             playClickSound();
             currentPhotoIdx++;
-            if (currentPhotoIdx >= eventPhotos.length) currentPhotoIdx = 0;
+            if (currentPhotoIdx >= activePhotoset.length) currentPhotoIdx = 0;
             updateLightbox();
         });
     }

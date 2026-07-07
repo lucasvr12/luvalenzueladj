@@ -287,17 +287,57 @@
                 </div>
             </div>
 
-            <!-- APP C: FOTOS (Galería & Lightbox) -->
+            <!-- APP C: FOTOS (Álbumes, Carrete & Lightbox) -->
             <div class="ios-app-window hidden" id="app-photos">
                 <div class="app-header">
-                    <button class="ios-btn home-back-btn">🏠 Home</button>
-                    <h2 class="app-title">Carrete</h2>
-                    <div style="width: 50px;"></div>
+                    <button class="ios-btn home-back-btn" id="photos-home-btn">🏠 Home</button>
+                    <button class="ios-btn back-btn hidden" id="photos-album-back-btn">Álbumes</button>
+                    <h2 class="app-title" id="photos-header-title">Álbumes</h2>
+                    <div style="width: 52px;" id="photos-header-spacer"></div>
                 </div>
-                <div class="app-content photos-grid-content">
-                    <div class="photos-album-title">Fotos de Eventos</div>
-                    <div class="photos-grid" id="photos-grid">
-                        <!-- Las fotos se inyectan por JS -->
+                
+                <div class="app-content photos-app-content">
+                    <!-- 1. VISTA DE ÁLBUMES (Lista / Cuadrícula de Carpetas estilo iOS 6) -->
+                    <div class="photos-albums-view" id="photos-albums-view">
+                        <!-- Álbum 1: Fotos de Eventos -->
+                        <div class="album-folder-card" data-album-id="album-events">
+                            <div class="album-stack-preview">
+                                <div class="album-photo-frame-back"></div>
+                                <div class="album-photo-frame-mid"></div>
+                                <div class="album-photo-frame-front">
+                                    <img src="photos/A7409646.jpg" alt="Portada Fotos">
+                                </div>
+                            </div>
+                            <div class="album-folder-info">
+                                <span class="album-name">Fotos</span>
+                                <span class="album-count">5</span>
+                            </div>
+                            <span class="album-folder-chevron">&gt;</span>
+                        </div>
+
+                        <!-- Álbum 2: Gigs de Instagram -->
+                        <div class="album-folder-card" data-album-id="album-gigs">
+                            <div class="album-stack-preview">
+                                <div class="album-photo-frame-back"></div>
+                                <div class="album-photo-frame-mid"></div>
+                                <div class="album-photo-frame-front">
+                                    <img src="photos/gigs/Screenshot_20260707_134054_Instagram.jpg" alt="Portada Gigs">
+                                </div>
+                            </div>
+                            <div class="album-folder-info">
+                                <span class="album-name">Gigs</span>
+                                <span class="album-count">22</span>
+                            </div>
+                            <span class="album-folder-chevron">&gt;</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. VISTA DE REJILLA DE FOTOS (Grid de miniaturas) -->
+                    <div class="photos-grid-view hidden" id="photos-grid-view">
+                        <div class="photos-album-title" id="photos-grid-album-title">Fotos de Eventos</div>
+                        <div class="photos-grid" id="photos-grid">
+                            <!-- Las fotos se inyectan dinámicamente por JS -->
+                        </div>
                     </div>
                 </div>
 
@@ -343,7 +383,7 @@
 
                         <!-- Enlaces Estilo Botones Clásicos iOS -->
                         <div class="safari-links-group">
-                            <a href="https://instagram.com" target="_blank" class="safari-link-card">
+                            <a href="https://www.instagram.com/luvalenzueladj/" target="_blank" class="safari-link-card">
                                 <span class="link-icon">📸</span>
                                 <div class="link-details">
                                     <span class="link-title">Instagram</span>
