@@ -662,36 +662,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================================================
-    // 6. APP DE YOUTUBE (Wooden TV interactivo)
+    // 6. APP DE YOUTUBE (Wooden TV interactivo - Video Local)
     // ==========================================================================
     const tvDialV = document.getElementById("tv-dial-v");
     const tvDialH = document.getElementById("tv-dial-h");
     const tvPowerBtn = document.getElementById("tv-power-btn");
     const tvScreen = document.querySelector(".tv-inner-screen");
-    const ytPlayer = document.getElementById("youtube-player");
-
+    const tvLocalVideo = document.getElementById("tv-local-video");
+ 
     let dialVAngle = 0;
     let dialHAngle = 0;
     let isTvPowerOn = true;
-
+ 
     if (tvDialV) {
         tvDialV.addEventListener("click", () => {
             initAudioContext();
             playClickSound();
             dialVAngle += 30;
             tvDialV.querySelector(".dial-indicator").style.transform = `rotate(${dialVAngle}deg)`;
+            
+            // Perilla vertical: Adelantar video 15 segundos de forma interactiva
+            if (tvLocalVideo && isTvPowerOn) {
+                tvLocalVideo.currentTime = Math.min(tvLocalVideo.duration || 0, tvLocalVideo.currentTime + 15);
+            }
         });
     }
-
+ 
     if (tvDialH) {
         tvDialH.addEventListener("click", () => {
             initAudioContext();
             playClickSound();
             dialHAngle += 30;
             tvDialH.querySelector(".dial-indicator").style.transform = `rotate(${dialHAngle}deg)`;
+            
+            // Perilla horizontal: Retroceder video 15 segundos
+            if (tvLocalVideo && isTvPowerOn) {
+                tvLocalVideo.currentTime = Math.max(0, tvLocalVideo.currentTime - 15);
+            }
         });
     }
-
+ 
     if (tvPowerBtn) {
         tvPowerBtn.addEventListener("click", () => {
             initAudioContext();
@@ -704,14 +714,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 toggle.classList.remove("on");
                 tvScreen.style.filter = "none";
                 tvScreen.style.opacity = "1";
-                // Recargar iframe para reanudar el reproductor
-                ytPlayer.src = "https://www.youtube.com/embed/S_B71s-2rpo?enablejsapi=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&controls=1";
+                // Reanudar video local al encender
+                if (tvLocalVideo) {
+                    tvLocalVideo.play().catch(() => {});
+                }
             } else {
                 toggle.classList.add("on"); // Visualmente apagado empujándolo a la derecha
                 tvScreen.style.filter = "brightness(0) contrast(0)";
-                tvScreen.style.opacity = "0.05"; // Un destello pequeñísimo del fósforo de la pantalla
-                // Eliminar el src para detener el video al apagar
-                ytPlayer.src = "";
+                tvScreen.style.opacity = "0.05"; // Destello del fósforo
+                // Pausar video local al apagar
+                if (tvLocalVideo) {
+                    tvLocalVideo.pause();
+                }
             }
         });
     }

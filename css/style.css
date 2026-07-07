@@ -1157,10 +1157,13 @@ body {
     position: relative;
 }
 
-.tv-inner-screen iframe {
+.tv-inner-screen iframe,
+.tv-inner-screen video {
     width: 100%;
     height: 100%;
     border: none;
+    background: #000;
+    object-fit: contain;
 }
 
 .tv-glass-glow {
