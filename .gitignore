@@ -1,0 +1,10 @@
+# Ignorar archivos Raw pesados de cámara en GitHub/Vercel
+photos/*.CR2
+
+# Ignorar archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar las guías LEEME temporales (opcional, si no las deseas en tu repo de producción)
+*LEEME.txt
+antigraviti_plan.md

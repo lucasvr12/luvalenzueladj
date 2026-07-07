@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DJ Lu Valenzuela - iOS 6 Press Kit</title>
+    
+    <!-- Meta tags de Apple Web App para máxima fidelidad -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LuValenzuela">
+    
+    <!-- Tipografía de Google Fonts para replicar Helvetica Neue de Apple y Marker Felt para Notas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Marker+Felt&family=Open+Sans:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Enlace al CSS maestro -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Contenedor Principal: Recreación del iPhone Físico en Escritorio -->
+    <div class="iphone-device-frame">
+        <!-- Sensor superior y Altavoz del iPhone -->
+        <div class="iphone-top-hardware">
+            <div class="camera-lens"></div>
+            <div class="speaker-grill"></div>
+        </div>
+        
+        <!-- Pantalla del Teléfono (Viewport del SPA) -->
+        <div class="iphone-screen-viewport">
+            
+            <!-- 1. BARRA DE ESTADO DE iOS 6 (Superior) -->
+            <div class="ios-status-bar">
+                <div class="status-left">
+                    <div class="signal-strength">
+                        <span class="dot active"></span>
+                        <span class="dot active"></span>
+                        <span class="dot active"></span>
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <span class="carrier-name">DJ-NET</span>
+                    <span class="network-type">3G</span>
+                </div>
+                <div class="status-center">
+                    <span class="current-time-text">12:00</span>
+                </div>
+                <div class="status-right">
+                    <span class="battery-percentage">100%</span>
+                    <div class="battery-icon">
+                        <div class="battery-level" style="width: 100%;"></div>
+                        <div class="battery-tip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PANTALLA DE BLOQUEO (Lock Screen) -->
+            <div class="ios-lock-screen" id="lock-screen">
+                <!-- Reloj y Fecha -->
+                <div class="lock-clock-container">
+                    <h1 class="lock-time" id="lock-time">12:00</h1>
+                    <p class="lock-date" id="lock-date">Martes, 26 de Mayo</p>
+                </div>
+
+                <!-- Contenedor de Notificaciones Falsas de Contratación (Push Notifications) -->
+                <div class="push-notifications-container">
+                    <!-- Notificación 1: Booking Agent -->
+                    <div class="push-notification active" id="noti-booking">
+                        <div class="noti-header">
+                            <div class="noti-app-icon icon-phone-small"></div>
+                            <span class="noti-app-name">Teléfono</span>
+                            <span class="noti-time">Hace 2m</span>
+                        </div>
+                        <div class="noti-body">
+                            <span class="noti-title">Agencia de Bookings</span>
+                            <p class="noti-message">¡Nueva oferta de contratación para el Festival Sun & Sound 2026! 🎧🔥</p>
+                        </div>
+                    </div>
+
+                    <!-- Notificación 2: SoundCloud -->
+                    <div class="push-notification active" id="noti-soundcloud">
+                        <div class="noti-header">
+                            <div class="noti-app-icon icon-ipod-small"></div>
+                            <span class="noti-app-name">Música</span>
+                            <span class="noti-time">Ahora</span>
+                        </div>
+                        <div class="noti-body">
+                            <span class="noti-title">SoundCloud</span>
+                            <p class="noti-message">¡Tu último set de Tech House está en el Top 10 de tendencias! 📈</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Icónico Slide to Unlock de iOS 6 -->
+                <div class="slide-to-unlock-container">
+                    <div class="slide-track">
+                        <div class="slide-handle" id="slide-handle">
+                            <span class="arrow-chevron">&gt;</span>
+                        </div>
+                        <div class="slide-text" id="slide-text">desliza para desbloquear</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. PANTALLA DE INICIO (Home Screen) -->
+            <div class="ios-home-screen hidden" id="home-screen">
+                <!-- Cuadrícula de Apps (Icons Grid) -->
+                <div class="apps-grid">
+                    <!-- App 1: Notas (Biografía) -->
+                    <div class="app-icon-wrapper" data-app="app-notes">
+                        <div class="app-icon icon-notes">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Notas</span>
+                    </div>
+
+                    <!-- App 2: Fotos (Galería) -->
+                    <div class="app-icon-wrapper" data-app="app-photos">
+                        <div class="app-icon icon-photos">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Fotos</span>
+                    </div>
+
+                    <!-- App 3: YouTube (Sets de Video) -->
+                    <div class="app-icon-wrapper" data-app="app-youtube">
+                        <div class="app-icon icon-youtube">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">YouTube</span>
+                    </div>
+
+                    <!-- App 4: Safari (Redes Oficiales) -->
+                    <div class="app-icon-wrapper" data-app="app-safari">
+                        <div class="app-icon icon-safari">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Safari</span>
+                    </div>
+                </div>
+
+                <!-- DOCK 3D DE iOS 6 (Con reflejos y perspectiva) -->
+                <div class="ios-dock-container">
+                    <div class="dock-shelf"></div>
+                    <div class="dock-icons">
+                        <!-- App Dock 1: Teléfono (Contacto & Press Kit) -->
+                        <div class="app-icon-wrapper" data-app="app-phone">
+                            <div class="app-icon-container">
+                                <div class="app-icon icon-phone">
+                                    <div class="glossy-shine"></div>
+                                </div>
+                                <div class="app-icon-reflection icon-phone"></div>
+                            </div>
+                            <span class="app-label">Teléfono</span>
+                        </div>
+
+                        <!-- App Dock 2: iPod/Música (Reproductor) -->
+                        <div class="app-icon-wrapper" data-app="app-ipod">
+                            <div class="app-icon-container">
+                                <div class="app-icon icon-ipod">
+                                    <div class="glossy-shine"></div>
+                                </div>
+                                <div class="app-icon-reflection icon-ipod"></div>
+                            </div>
+                            <span class="app-label">Música</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. CONTENEDORES DE APLICACIONES INDIVIDUALES (Ventanas de Apps) -->
+            
+            <!-- APP A: MÚSICA / IPOD -->
+            <div class="ios-app-window hidden" id="app-ipod">
+                <!-- Header Plateado de iOS 6 -->
+                <div class="app-header">
+                    <button class="ios-btn back-btn text-btn hidden" id="ipod-back-btn">Atrás</button>
+                    <h2 class="app-title" id="ipod-header-title">iPod</h2>
+                    <button class="ios-btn right-btn" id="ipod-list-toggle">Canciones</button>
+                </div>
+                
+                <div class="app-content ipod-content">
+                    <!-- Vista de Reproducción en Curso -->
+                    <div class="ipod-player-view" id="ipod-player-view">
+                        <!-- Portada de Vinilo/Álbum con Efecto Giratorio -->
+                        <div class="album-art-container">
+                            <div class="album-vinyl-wrapper">
+                                <div class="album-vinyl-record" id="vinyl-disc"></div>
+                                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=400" alt="Portada de Álbum" class="album-cover-img" id="ipod-album-art">
+                            </div>
+                        </div>
+
+                        <!-- Metadatos de la Canción -->
+                        <div class="song-metadata">
+                            <h3 class="song-title" id="ipod-song-title">Vibrations</h3>
+                            <p class="song-artist" id="ipod-song-artist">DJ Lu Valenzuela</p>
+                            <p class="song-album" id="ipod-song-album">Summer Beats EP (2026)</p>
+                        </div>
+
+                        <!-- Barra de Progreso y Tiempo -->
+                        <div class="progress-bar-container">
+                            <span class="time-elapsed" id="ipod-time-elapsed">0:00</span>
+                            <div class="progress-track" id="ipod-progress-track">
+                                <div class="progress-fill" id="ipod-progress-fill"></div>
+                                <div class="progress-thumb" id="ipod-progress-thumb"></div>
+                            </div>
+                            <span class="time-remaining" id="ipod-time-remaining">-3:45</span>
+                        </div>
+
+                        <!-- Controles de Audio Skeuomórficos -->
+                        <div class="ipod-controls-row">
+                            <button class="ipod-control-btn prev-btn" id="ipod-prev"></button>
+                            <button class="ipod-control-btn play-pause-btn" id="ipod-play-pause"></button>
+                            <button class="ipod-control-btn next-btn" id="ipod-next"></button>
+                        </div>
+
+                        <!-- Control de Volumen con Rueda Cromada -->
+                        <div class="volume-slider-container">
+                            <span class="vol-icon vol-low"></span>
+                            <div class="volume-track" id="ipod-volume-track">
+                                <div class="volume-fill" id="ipod-volume-fill" style="width: 70%;"></div>
+                                <div class="volume-thumb" id="ipod-volume-thumb" style="left: 70%;"></div>
+                            </div>
+                            <span class="vol-icon vol-high"></span>
+                        </div>
+                    </div>
+
+                    <!-- Vista de Lista de Canciones (Tracks) -->
+                    <div class="ipod-list-view hidden" id="ipod-list-view">
+                        <ul class="songs-table-list" id="songs-list">
+                            <!-- Inyectado dinámicamente con JS -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP B: YOUTUBE (El Televisor de Madera) -->
+            <div class="ios-app-window hidden" id="app-youtube">
+                <div class="app-header">
+                    <h2 class="app-title">YouTube</h2>
+                </div>
+                <div class="app-content tv-wooden-content">
+                    <!-- Televisor Skeuomórfico Clásico -->
+                    <div class="classic-tv-container">
+                        <div class="tv-wooden-cabinet">
+                            <div class="tv-screen-bezel">
+                                <div class="tv-inner-screen">
+                                    <div class="tv-glass-glow"></div>
+                                    <!-- Iframe del Set del DJ -->
+                                    <iframe 
+                                        id="youtube-player"
+                                        src="https://www.youtube.com/embed/S_B71s-2rpo?enablejsapi=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&controls=1" 
+                                        title="DJ Set en Vivo"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <!-- Panel de Mandos de la TV vieja -->
+                            <div class="tv-controls-panel">
+                                <div class="tv-dial dial-top" id="tv-dial-v">
+                                    <div class="dial-indicator"></div>
+                                </div>
+                                <div class="tv-dial dial-bottom" id="tv-dial-h">
+                                    <div class="dial-indicator"></div>
+                                </div>
+                                <div class="tv-speaker-grid">
+                                    <span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                                <div class="tv-power-switch" id="tv-power-btn">
+                                    <div class="switch-toggle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tv-description-plate">
+                        <h3>DJ Lu Valenzuela - Live Set 2026</h3>
+                        <p>Grabado en vivo en la terraza Sunset Session. 60 minutos de Tech House e hipnóticos beats electrónicos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP C: FOTOS (Galería & Lightbox) -->
+            <div class="ios-app-window hidden" id="app-photos">
+                <div class="app-header">
+                    <h2 class="app-title">Carrete</h2>
+                </div>
+                <div class="app-content photos-grid-content">
+                    <div class="photos-album-title">Fotos de Eventos</div>
+                    <div class="photos-grid" id="photos-grid">
+                        <!-- Las fotos se inyectan por JS -->
+                    </div>
+                </div>
+
+                <!-- Visor Nativo Estilo iOS Lightbox (Oculto por defecto) -->
+                <div class="ios-lightbox hidden" id="photo-lightbox">
+                    <div class="lightbox-header">
+                        <button class="ios-btn back-btn" id="lightbox-close">Cerrar</button>
+                        <span class="lightbox-counter" id="lightbox-counter">1 de 6</span>
+                        <div style="width: 50px;"></div> <!-- Espaciador para centrar -->
+                    </div>
+                    <div class="lightbox-body">
+                        <button class="lightbox-nav-btn prev" id="lightbox-prev">&lt;</button>
+                        <img src="" alt="Zoom Foto" class="lightbox-img" id="lightbox-img">
+                        <button class="lightbox-nav-btn next" id="lightbox-next">&gt;</button>
+                    </div>
+                    <div class="lightbox-footer">
+                        <span class="photo-caption-text" id="lightbox-caption">Festival Sunset, Cabina Principal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP D: SAFARI (Redes Sociales & Links) -->
+            <div class="ios-app-window hidden" id="app-safari">
+                <!-- Barra de Direcciones Clásica de iOS 6 -->
+                <div class="safari-address-bar">
+                    <div class="safari-address-input-wrapper">
+                        <span class="safari-lock-icon">🔒</span>
+                        <input type="text" class="safari-url-input" value="https://luvalenzueladj.com/links" readonly>
+                        <button class="safari-reload-btn">↻</button>
+                    </div>
+                </div>
+                
+                <div class="app-content safari-content">
+                    <div class="safari-portal-container">
+                        <div class="safari-header-brand">
+                            <div class="safari-avatar-ring">
+                                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200" alt="DJ Lu Valenzuela" class="safari-avatar">
+                            </div>
+                            <h1>Lu Valenzuela</h1>
+                            <p>Productor & DJ de Tech House / Techno</p>
+                        </div>
+
+                        <!-- Enlaces Estilo Botones Clásicos iOS -->
+                        <div class="safari-links-group">
+                            <a href="https://instagram.com" target="_blank" class="safari-link-card">
+                                <span class="link-icon">📸</span>
+                                <div class="link-details">
+                                    <span class="link-title">Instagram</span>
+                                    <span class="link-subtitle">@luvalenzueladj - Mi día a día</span>
+                                </div>
+                                <span class="link-chevron">&gt;</span>
+                            </a>
+
+                            <a href="https://soundcloud.com" target="_blank" class="safari-link-card">
+                                <span class="link-icon">☁️</span>
+                                <div class="link-details">
+                                    <span class="link-title">SoundCloud</span>
+                                    <span class="link-subtitle">Escucha mis sets y podcasts completos</span>
+                                </div>
+                                <span class="link-chevron">&gt;</span>
+                            </a>
+
+                            <a href="https://spotify.com" target="_blank" class="safari-link-card">
+                                <span class="link-icon">🟢</span>
+                                <div class="link-details">
+                                    <span class="link-title">Spotify</span>
+                                    <span class="link-subtitle">Escucha mis últimas producciones oficiales</span>
+                                </div>
+                                <span class="link-chevron">&gt;</span>
+                            </a>
+
+                            <a href="https://residentadvisor.net" target="_blank" class="safari-link-card">
+                                <span class="link-icon">🎧</span>
+                                <div class="link-details">
+                                    <span class="link-title">Resident Advisor</span>
+                                    <span class="link-subtitle">Mi perfil de artista, fechas y lanzamientos</span>
+                                </div>
+                                <span class="link-chevron">&gt;</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP E: NOTAS (Biografía del DJ) -->
+            <div class="ios-app-window hidden" id="app-notes">
+                <!-- Header de Notas con Cuero -->
+                <div class="app-header notes-header">
+                    <h2 class="app-title font-marker">Notas</h2>
+                </div>
+                
+                <!-- Bloc de Notas Amarillo Lino Rayado -->
+                <div class="app-content notes-yellow-pad">
+                    <div class="notes-leather-header">
+                        <div class="notes-metal-rings"></div>
+                    </div>
+                    <div class="notes-paper-content">
+                        <!-- Fecha de la Nota -->
+                        <div class="note-date-stamp" id="note-date-stamp">26 de Mayo de 2026, 11:30 PM</div>
+                        
+                        <!-- Biografía Redactada en Fuente Marker Felt o Amigable -->
+                        <div class="note-text-body font-marker">
+                            <h2 class="note-bio-title">Biografía - DJ Lu Valenzuela</h2>
+                            <p class="note-paragraph">
+                                Con una visión musical que combina la calidez y el groove del Tech House de la vieja escuela con la potencia y contundencia del Techno actual, Lu Valenzuela se ha consolidado como una de las figuras más enérgicas e hipnóticas de la escena actual.
+                            </p>
+                            <p class="note-paragraph">
+                                Nacido bajo el influjo de los sintetizadores analógicos y las cajas de ritmo clásicas, sus presentaciones son auténticos viajes sonoros que se adaptan con maestría tanto a íntimas cabinas de clubes underground como a masivos festivales al aire libre. Sus mezclas destacan por transiciones milimétricas, bajos profundos diseñados para el pecho y una selección de vocales con altas dosis de groove.
+                            </p>
+                            <p class="note-paragraph">
+                                En el ámbito de la producción, sus trabajos han sido respaldados por importantes figuras de la industria, colocándose de forma regular en los charts especializados. Su misión en cada set es simple y sagrada: conectar mentes en la pista a través de la física de la vibración del bajo.
+                            </p>
+                            <p class="note-paragraph">
+                                Influencias: Carl Cox, Green Velvet, Marco Carola, Loco Dice y la elegancia clásica de Daft Punk.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP F: TELÉFONO (Booking & Press Kit Download) -->
+            <div class="ios-app-window hidden" id="app-phone">
+                <!-- Selector de pestañas clásico de iOS 6 -->
+                <div class="phone-tabs-header">
+                    <button class="phone-tab-btn active" data-tab="tab-keypad">Teclado</button>
+                    <button class="phone-tab-btn" data-tab="tab-contacts">Booking</button>
+                </div>
+                
+                <div class="app-content phone-content">
+                    <!-- PESTAÑA A: TECLADO NUMÉRICO -->
+                    <div class="phone-tab-content" id="tab-keypad">
+                        <!-- Display del número marcado -->
+                        <div class="dialer-screen-display">
+                            <span class="dialed-number" id="dialed-number"></span>
+                            <button class="dialed-clear-btn" id="dialer-backspace">⌫</button>
+                        </div>
+
+                        <!-- El teclado numérico de iOS 6 -->
+                        <div class="phone-keypad-grid">
+                            <button class="keypad-key" data-digit="1"><span class="num">1</span><span class="lets">&nbsp;</span></button>
+                            <button class="keypad-key" data-digit="2"><span class="num">2</span><span class="lets">ABC</span></button>
+                            <button class="keypad-key" data-digit="3"><span class="num">3</span><span class="lets">DEF</span></button>
+                            <button class="keypad-key" data-digit="4"><span class="num">4</span><span class="lets">GHI</span></button>
+                            <button class="keypad-key" data-digit="5"><span class="num">5</span><span class="lets">JKL</span></button>
+                            <button class="keypad-key" data-digit="6"><span class="num">6</span><span class="lets">MNO</span></button>
+                            <button class="keypad-key" data-digit="7"><span class="num">7</span><span class="lets">PQRS</span></button>
+                            <button class="keypad-key" data-digit="8"><span class="num">8</span><span class="lets">TUV</span></button>
+                            <button class="keypad-key" data-digit="9"><span class="num">9</span><span class="lets">WXYZ</span></button>
+                            <button class="keypad-key" data-digit="*"><span class="num">*</span><span class="lets">&nbsp;</span></button>
+                            <button class="keypad-key" data-digit="0"><span class="num">0</span><span class="lets">+</span></button>
+                            <button class="keypad-key" data-digit="#"><span class="num">#</span><span class="lets">&nbsp;</span></button>
+                        </div>
+
+                        <!-- Botón Verde de Llamada de iOS 6 -->
+                        <div class="dialer-action-row">
+                            <button class="dialer-call-btn" id="dialer-call-btn">Llamar</button>
+                        </div>
+                    </div>
+
+                    <!-- PESTAÑA B: CONTACTO DE BOOKING -->
+                    <div class="phone-tab-content hidden" id="tab-contacts">
+                        <div class="contact-card-profile">
+                            <div class="profile-avatar-circle">LV</div>
+                            <h2>Lu Valenzuela</h2>
+                            <p class="profile-job">DJ & Productor de Tech House</p>
+                        </div>
+
+                        <!-- Lista de datos e interactivos -->
+                        <div class="contact-details-table">
+                            <div class="contact-row">
+                                <span class="label">Móvil Booking</span>
+                                <a href="tel:+34600000000" class="value link-value" id="btn-call-booking">+34 600 000 000</a>
+                            </div>
+                            <div class="contact-row">
+                                <span class="label">Email Contrataciones</span>
+                                <a href="mailto:booking@luvalenzueladj.com" class="value link-value">booking@luvalenzueladj.com</a>
+                            </div>
+                            <div class="contact-row">
+                                <span class="label">Ciudad Base</span>
+                                <span class="value">Madrid, España</span>
+                            </div>
+                        </div>
+
+                        <!-- Sección Destacada: Descargar Dossier / Rider PDF -->
+                        <div class="presskit-download-container">
+                            <p class="pk-info-text">Descarga el Rider Técnico y Press Kit completo en PDF para tu próximo evento:</p>
+                            <!-- Enlace de descarga interactiva con botón skeuomórfico brillante -->
+                            <a href="docs/presskit_dj_lu_valenzuela.pdf" download class="ios-metallic-download-btn">
+                                <span class="pk-icon-download">📥</span>
+                                Descargar Press Kit PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. BOTÓN FÍSICO "HOME" (Hardware del iPhone) -->
+            <div class="iphone-home-button-hardware" id="hw-home-button">
+                <div class="home-square-symbol"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Integración del JavaScript Maestro -->
+    <script src="js/app.js"></script>
+</body>
+</html>
