@@ -175,17 +175,25 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateClock() {
         const now = new Date();
         
-        // Horas y minutos (HH:MM)
+        // Formato 12 horas para la barra de estado y visuales
         let hours = now.getHours();
         let minutes = now.getMinutes();
-        hours = hours < 10 ? '0' + hours : hours;
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        hours = hours % 12;
+        hours = hours ? hours : 12; // La hora '0' debe ser '12'
         minutes = minutes < 10 ? '0' + minutes : minutes;
-        const timeString = `${hours}:${minutes}`;
+        
+        // Reloj de la barra superior (formato corto 12h: ej: 10:33 PM)
+        const statusBarTimeString = `${hours}:${minutes} ${ampm}`;
+        
+        // Reloj gigante del Lock Screen (ej: 10:33)
+        const lockScreenTimeString = `${hours}:${minutes}`;
         
         // Actualizar barra de estado y pantalla de bloqueo
-        document.querySelectorAll(".current-time-text").forEach(el => el.textContent = timeString);
+        document.querySelectorAll(".current-time-text").forEach(el => el.textContent = statusBarTimeString);
         const lockTimeEl = document.getElementById("lock-time");
-        if (lockTimeEl) lockTimeEl.textContent = timeString;
+        if (lockTimeEl) lockTimeEl.textContent = lockScreenTimeString;
 
         // Fecha larga en español para la pantalla de bloqueo
         const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -202,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Actualizar la fecha stamp de la App de Notas
         const noteStamp = document.getElementById("note-date-stamp");
         if (noteStamp) {
-            noteStamp.textContent = `${dayNum} de ${monthName} de ${now.getFullYear()}, ${timeString}`;
+            noteStamp.textContent = `${dayNum} de ${monthName} de ${now.getFullYear()}, ${statusBarTimeString}`;
         }
     }
     
@@ -224,45 +232,66 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
     let startX = 0;
     let currentX = 0;
-    let maxDrag = 0;
+    let maxDrag = 220; // Valor por defecto de seguridad (recorrido típico del slider)
 
     if (slideHandle && slideTrack) {
         // Poner la barra de estado inicial en formato lockscreen (transparente y letras blancas)
         statusBar.classList.add("lock-screen-status-bar");
         
-        // Calcular recorrido máximo
+        // Calcular recorrido máximo dinámicamente
         const updateMaxDrag = () => {
-            maxDrag = slideTrack.clientWidth - slideHandle.clientWidth - 4; // margen
+            const trackWidth = slideTrack.clientWidth || slideTrack.offsetWidth || 280;
+            const handleWidth = slideHandle.clientWidth || slideHandle.offsetWidth || 56;
+            maxDrag = trackWidth - handleWidth - 4; // margen de seguridad
+            
+            // Si por alguna razón el cálculo da <= 0, usar un fallback razonable
+            if (maxDrag <= 0) {
+                maxDrag = 220;
+            }
         };
         
-        window.addEventListener("resize", updateMaxDrag);
+        // Calcular inicialmente
         updateMaxDrag();
+        window.addEventListener("resize", updateMaxDrag);
 
         // Eventos mouse
         slideHandle.addEventListener("mousedown", dragStart);
-        window.addEventListener("mousemove", dragMove);
-        window.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", dragMove);
+        document.addEventListener("mouseup", dragEnd);
 
         // Eventos táctiles (móvil)
-        slideHandle.addEventListener("touchstart", dragStart, { passive: true });
-        window.addEventListener("touchmove", dragMove, { passive: false });
-        window.addEventListener("touchend", dragEnd);
+        slideHandle.addEventListener("touchstart", dragStart, { passive: false });
+        document.addEventListener("touchmove", dragMove, { passive: false });
+        document.addEventListener("touchend", dragEnd);
 
         function dragStart(e) {
             initAudioContext();
+            
+            // Forzar actualización de límites al presionar
+            updateMaxDrag();
+            
             isDragging = true;
             slideHandle.style.transition = "none";
-            startX = (e.touches ? e.touches[0].clientX : e.clientX) - currentX;
+            
+            // Obtener coordenadas
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            
+            // Prevenir drag de imagen fantasma del navegador
+            e.preventDefault();
+            
+            startX = clientX - currentX;
         }
 
         function dragMove(e) {
             if (!isDragging) return;
-            if (e.cancelable) e.preventDefault(); // Evitar scroll
+            
+            // Evitar scrolls raros en móviles
+            if (e.cancelable) e.preventDefault();
             
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             let x = clientX - startX;
             
-            // Forzar límites
+            // Limitar arrastre
             if (x < 0) x = 0;
             if (x > maxDrag) x = maxDrag;
             
@@ -293,25 +322,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function unlockiPhone() {
             // Animación final de desbloqueo
-            slideHandle.style.transition = "transform 0.15s ease-out";
-            slideHandle.style.transform = `translateX(${maxDrag}px)`;
+            if (slideHandle) {
+                slideHandle.style.transition = "transform 0.15s ease-out";
+                slideHandle.style.transform = `translateX(${maxDrag || 220}px)`;
+            }
             
             // Sonido
-            playUnlockSound();
+            try {
+                playUnlockSound();
+            } catch (e) {
+                console.log("Audio not allowed yet:", e);
+            }
             
             // Transición de salida de Lock Screen
-            lockScreen.classList.add("unlocked");
-            statusBar.classList.remove("lock-screen-status-bar");
+            if (lockScreen) lockScreen.classList.add("unlocked");
+            if (statusBar) statusBar.classList.remove("lock-screen-status-bar");
             
             setTimeout(() => {
-                lockScreen.classList.add("hidden");
-                homeScreen.classList.remove("hidden");
+                if (lockScreen) lockScreen.classList.add("hidden");
+                if (homeScreen) homeScreen.classList.remove("hidden");
                 
                 // Efecto de pop de las notificaciones
                 setTimeout(() => {
                     document.getElementById("noti-booking")?.classList.add("active");
                 }, 300);
             }, 500);
+        }
+    }
+
+    // Bindeo del botón de desbloqueo para Desktop de forma global y segura
+    const desktopUnlockBtn = document.getElementById("btn-desktop-unlock");
+    if (desktopUnlockBtn) {
+        desktopUnlockBtn.addEventListener("click", () => {
+            // Intentar inicializar audio de forma segura
+            try {
+                initAudioContext();
+            } catch (e) {
+                console.log("Audio Context initialization failed:", e);
+            }
+            
+            // Forzar desbloqueo directamente
+            const lockScreen = document.getElementById("lock-screen");
+            const homeScreen = document.getElementById("home-screen");
+            const statusBar = document.querySelector(".ios-status-bar");
+            const slideHandle = document.getElementById("slide-handle");
+            
+            if (slideHandle) {
+                slideHandle.style.transition = "transform 0.15s ease-out";
+                slideHandle.style.transform = `translateX(220px)`;
+            }
+            
+            try {
+                playUnlockSound();
+            } catch(e) {}
+
+            if (lockScreen) lockScreen.classList.add("unlocked");
+            if (statusBar) statusBar.classList.remove("lock-screen-status-bar");
+            
+            setTimeout(() => {
+                if (lockScreen) lockScreen.classList.add("hidden");
+                if (homeScreen) homeScreen.classList.remove("hidden");
+                
+                setTimeout(() => {
+                    document.getElementById("noti-booking")?.classList.add("active");
+                }, 300);
+            }, 500);
+        });
+    }
+            });
         }
     }
 
@@ -1004,13 +1082,258 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    // Configuración del botón de contacto llamar
-    const callBookingBtn = document.getElementById("btn-call-booking");
-    if (callBookingBtn) {
-        callBookingBtn.addEventListener("click", (e) => {
-            // Evitar que intente disparar el protocolo nativo en pc para probar
-            initAudioContext();
-            playFakeRingTone();
+            });
         });
     }
+
+    // ==========================================================================
+    // 9. LÓGICA DE LAS NUEVAS APPS (Notas PDF, Clima, Calendario, iMessage)
+    // ==========================================================================
+
+    /* A. NOTAS: Alternar entre Libreta de Biografía y Visor PDF */
+    const btnNoteBio = document.getElementById("btn-note-bio");
+    const btnNotePdf = document.getElementById("btn-note-pdf");
+    const noteBioContent = document.getElementById("note-bio-content");
+    const notePdfContent = document.getElementById("note-pdf-content");
+
+    if (btnNoteBio && btnNotePdf) {
+        btnNoteBio.addEventListener("click", () => {
+            initAudioContext();
+            playClickSound();
+            
+            // Botones
+            btnNoteBio.classList.add("active");
+            btnNoteBio.style.background = "linear-gradient(to bottom, #fce0a2 0%, #e2ab39 100%)";
+            btnNoteBio.style.color = "#4a3e20";
+            btnNoteBio.style.borderColor = "#a07010";
+
+            btnNotePdf.classList.remove("active");
+            btnNotePdf.style.background = "linear-gradient(to bottom, #f5f5f5 0%, #d8d8d8 100%)";
+            btnNotePdf.style.color = "#666";
+            btnNotePdf.style.borderColor = "#aaa";
+
+            // Contenidos
+            noteBioContent.classList.remove("hidden");
+            notePdfContent.classList.add("hidden");
+        });
+
+        btnNotePdf.addEventListener("click", () => {
+            initAudioContext();
+            playClickSound();
+
+            // Botones
+            btnNotePdf.classList.add("active");
+            btnNotePdf.style.background = "linear-gradient(to bottom, #fce0a2 0%, #e2ab39 100%)";
+            btnNotePdf.style.color = "#4a3e20";
+            btnNotePdf.style.borderColor = "#a07010";
+
+            btnNoteBio.classList.remove("active");
+            btnNoteBio.style.background = "linear-gradient(to bottom, #f5f5f5 0%, #d8d8d8 100%)";
+            btnNoteBio.style.color = "#666";
+            btnNoteBio.style.borderColor = "#aaa";
+
+            // Contenidos
+            noteBioContent.classList.add("hidden");
+            notePdfContent.classList.remove("hidden");
+        });
+    }
+
+    /* B. CALENDARIO: Generación de Gigs y Rejilla Interactiva */
+    const calendarDaysGrid = document.getElementById("calendar-days-grid");
+    const calendarEventsList = document.getElementById("calendar-events-list");
+
+    // Lista de Gigs (Julio 2026)
+    const gigsList = [
+        { day: 10, title: "Club Room Session - Warm Up", loc: "Monterrey, Nuevo León", time: "10:00 PM" },
+        { day: 17, title: "Showcase Sunset Terrace - Headliner Set", loc: "Monterrey, Nuevo León", time: "11:30 PM" },
+        { day: 24, title: "Tech House Warehouse Rave", loc: "Guadalajara, Jalisco", time: "01:00 AM" },
+        { day: 31, title: "Private Pool Party Session", loc: "Santiago, Nuevo León", time: "06:00 PM" }
+    ];
+
+    function initCalendar() {
+        if (!calendarDaysGrid) return;
+        
+        calendarDaysGrid.innerHTML = "";
+        
+        // Julio 2026 inicia en Miércoles (Día 3 de la semana, indexado 0-6: D=0, L=1, M=2, Mi=3)
+        const startDayOffset = 3;
+        const totalDays = 31;
+
+        // Celdas vacías iniciales
+        for (let i = 0; i < startDayOffset; i++) {
+            const emptyCell = document.createElement("span");
+            emptyCell.className = "calendar-day-cell inactive";
+            emptyCell.innerHTML = "";
+            calendarDaysGrid.appendChild(emptyCell);
+        }
+
+        // Celdas de los días
+        for (let day = 1; day <= totalDays; day++) {
+            const cell = document.createElement("span");
+            cell.className = "calendar-day-cell";
+            cell.textContent = day;
+
+            // Marcar si hoy es 17 (coincidiendo con el día del icono)
+            if (day === 17) {
+                cell.classList.add("today");
+            }
+
+            // Validar si este día tiene evento/gig
+            const hasEvent = gigsList.some(g => g.day === day);
+            if (hasEvent) {
+                cell.classList.add("has-event");
+            }
+
+            cell.addEventListener("click", () => {
+                initAudioContext();
+                playClickSound();
+                
+                // Quitar selección de otras
+                document.querySelectorAll(".calendar-day-cell").forEach(c => c.style.outline = "none");
+                cell.style.outline = "2px solid #ba2020";
+
+                renderEventsForDay(day);
+            });
+
+            calendarDaysGrid.appendChild(cell);
+        }
+
+        // Renderizar lista de eventos completa al inicio
+        renderEventsForDay(null);
+    }
+
+    function renderEventsForDay(day) {
+        if (!calendarEventsList) return;
+        calendarEventsList.innerHTML = "";
+
+        // Filtrar gigs
+        const filtered = day ? gigsList.filter(g => g.day === day) : gigsList;
+
+        if (filtered.length === 0) {
+            calendarEventsList.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center; padding: 10px;">No hay eventos agendados para este día.</p>`;
+            return;
+        }
+
+        filtered.forEach(gig => {
+            const card = document.createElement("div");
+            card.className = "calendar-event-card";
+            card.innerHTML = `
+                <span class="calendar-event-time">📅 Julio ${gig.day}, 2026 - ${gig.time}</span>
+                <div class="calendar-event-title">${gig.title}</div>
+                <span class="calendar-event-loc">📍 ${gig.loc}</span>
+            `;
+            calendarEventsList.appendChild(card);
+        });
+    }
+
+    initCalendar();
+
+    /* C. IMESSAGE: Conversación Humorística y Chat */
+    const imessageHistory = document.getElementById("imessage-history");
+    const imessageInput = document.getElementById("imessage-input");
+    const imessageSendBtn = document.getElementById("imessage-send-btn");
+
+    const chatScript = [
+        { type: "timestamp", text: "Martes 10:24 PM" },
+        { type: "received", text: "Oye bro, ¿puedes abrir con algo más tranquilo? Estás tocando demasiado duro y la gente ya está muy activa para mi set..." },
+        { type: "sent", text: "Jaja bro, la pista manda. El groove de Tech House no se frena 🎛️⚡" },
+        { type: "received", text: "Pero es que tocaste mi remix inédito!!" },
+        { type: "sent", text: "Una disculpa, bro, sonaba demasiado bien como para guardarla 😉" },
+        { type: "received", text: "jajaja bueno, me debes una cerveza en el backstage." }
+    ];
+
+    function loadMessageHistory() {
+        if (!imessageHistory) return;
+        imessageHistory.innerHTML = "";
+
+        chatScript.forEach(msg => {
+            appendMessageToHistory(msg.type, msg.text);
+        });
+        scrollToBottomChat();
+    }
+
+    function appendMessageToHistory(type, text) {
+        if (!imessageHistory) return;
+
+        if (type === "timestamp") {
+            const el = document.createElement("div");
+            el.className = "imessage-timestamp";
+            el.textContent = text;
+            imessageHistory.appendChild(el);
+        } else {
+            const bubble = document.createElement("div");
+            bubble.className = `imessage-bubble ${type}`;
+            bubble.textContent = text;
+            imessageHistory.appendChild(bubble);
+        }
+    }
+
+    function scrollToBottomChat() {
+        if (imessageHistory) {
+            imessageHistory.scrollTop = imessageHistory.scrollHeight;
+        }
+    }
+
+    if (imessageSendBtn && imessageInput) {
+        // Enviar al pulsar botón
+        imessageSendBtn.addEventListener("click", () => {
+            sendMessage();
+        });
+
+        // Enviar al presionar enter
+        imessageInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendMessage();
+            }
+        });
+    }
+
+    function sendMessage() {
+        const text = imessageInput.value.trim();
+        if (!text) return;
+
+        initAudioContext();
+        // Sonido de envío de iMessage (reutilizamos click sound por skeuomorfismo)
+        playClickSound();
+
+        appendMessageToHistory("sent", text);
+        imessageInput.value = "";
+        scrollToBottomChat();
+
+        // Auto-respuesta humorística aleatoria del DJ Random después de 1.5s
+        setTimeout(() => {
+            const randomAnswers = [
+                "Ya ando en la cabina, apúrate para el cambio de DJ! 🎧",
+                "Oye ese bajo se escucha brutal hasta el baño, qué canción es?",
+                "¿Me dejas tocar la última canción contigo? Hacemos B2B 🙌",
+                "La rompiste bro! Excelente set.",
+                "Pasa el playlist porfa!"
+            ];
+            const responseText = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+            
+            // Tono de llegada (reutilizamos el sonido de ringtone en tono súper corto o click)
+            playClickSound();
+            appendMessageToHistory("received", responseText);
+            scrollToBottomChat();
+        }, 1500);
+    }
+
+    loadMessageHistory();
+
+    /* D. ACTUALIZACIÓN DINÁMICA DE FECHA EN ICONO DE CALENDARIO */
+    function updateCalendarIconDate() {
+        const iconMonth = document.getElementById("icon-cal-month");
+        const iconDay = document.getElementById("icon-cal-day");
+        
+        if (iconMonth && iconDay) {
+            const today = new Date();
+            const monthsShort = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+            
+            iconMonth.textContent = monthsShort[today.getMonth()];
+            iconDay.textContent = today.getDate();
+        }
+    }
+    
+    updateCalendarIconDate();
 });
+

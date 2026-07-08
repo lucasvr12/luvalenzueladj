@@ -244,6 +244,47 @@ body {
     pointer-events: none; /* Desactivar interacciones al desbloquear */
 }
 
+/* Botón de Entrada Rápida en Desktop */
+.ios-desktop-unlock-btn {
+    background: linear-gradient(to bottom, #fcfcfc 0%, #dbdbdb 49%, #b7b7b7 50%, #d4d4d4 100%);
+    border: 1px solid #777;
+    border-radius: 20px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 1px 0 #fff;
+    box-shadow: 
+        inset 0 1px 0 #fff,
+        0 2px 5px rgba(0,0,0,0.3);
+    cursor: pointer;
+    margin-top: 15px;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    z-index: 510;
+}
+
+.ios-desktop-unlock-btn:hover {
+    background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 49%, #c8c8c8 50%, #e1e1e1 100%);
+    box-shadow: 
+        inset 0 1px 0 #fff,
+        0 3px 8px rgba(0,0,0,0.4);
+}
+
+.ios-desktop-unlock-btn:active {
+    transform: scale(0.97);
+    background: linear-gradient(to bottom, #aaaaaa 0%, #cccccc 100%);
+    box-shadow: 
+        inset 0 1px 2px rgba(0,0,0,0.3),
+        0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Ocultar en la media query móvil */
+@media (max-width: 480px) {
+    .ios-desktop-unlock-btn {
+        display: none !important;
+    }
+}
+
 .lock-clock-container {
     text-align: center;
     color: #fff;
@@ -2013,6 +2054,174 @@ body {
     background: #ffffff;
     min-height: 100%;
 }
+
+
+/* ==========================================================================
+   NUEVOS ESTILOS: CALENDARIO, CLIMA & IMESSAGE
+   ========================================================================== */
+
+/* 1. Icono Dinámico de Calendario */
+.icon-calendar-dynamic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.calendar-icon-month {
+    font-size: 8px;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    z-index: 5;
+    margin-top: 1px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+}
+
+.calendar-icon-day {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333333;
+    z-index: 5;
+    margin-top: 1px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* 2. Calendario App Styles */
+.calendar-day-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+.calendar-day-cell.inactive {
+    color: #ccc;
+}
+
+.calendar-day-cell.today {
+    background: #e23e3e;
+    color: #fff !important;
+}
+
+.calendar-day-cell.has-event::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    width: 4px;
+    height: 4px;
+    background: #555;
+    border-radius: 50%;
+}
+
+.calendar-day-cell.today.has-event::after {
+    background: #fff;
+}
+
+.calendar-day-cell:active {
+    background: #0b62e4;
+    color: #fff;
+}
+
+.calendar-event-card {
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.calendar-event-time {
+    font-size: 11px;
+    font-weight: bold;
+    color: #e23e3e;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.calendar-event-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.calendar-event-loc {
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-top: 2px;
+}
+
+/* 3. iMessage Chat Bubbles (iOS 6 Skeuomorphic Style) */
+.imessage-bubble {
+    max-width: 75%;
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.4;
+    position: relative;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* Burbuja del DJ Random (Recibida - Gris) */
+.imessage-bubble.received {
+    align-self: flex-start;
+    background: linear-gradient(to bottom, #f9f9f9 0%, #e3e3e7 100%);
+    border: 1px solid #d1d1d6;
+    color: #000;
+}
+
+/* Burbuja de Lu Valenzuela (Enviada - Verde iOS clásica) */
+.imessage-bubble.sent {
+    align-self: flex-end;
+    background: linear-gradient(to bottom, #7ce65c 0%, #3cd016 100%);
+    border: 1px solid #4baf25;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+}
+
+/* Pequeñas colas de burbuja skeuomórficas */
+.imessage-bubble::before {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    width: 12px;
+    height: 12px;
+}
+
+.imessage-bubble.received::before {
+    left: -6px;
+    background: radial-gradient(circle at top right, transparent 50%, #e3e3e7 51%);
+    border-bottom: 1px solid #d1d1d6;
+    z-index: 1;
+}
+
+.imessage-bubble.sent::before {
+    right: -6px;
+    background: radial-gradient(circle at top left, transparent 50%, #3cd016 51%);
+    border-bottom: 1px solid #4baf25;
+    z-index: 1;
+}
+
+.imessage-timestamp {
+    align-self: center;
+    font-size: 10px;
+    color: #8e8e93;
+    margin: 4px 0;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 
 
 

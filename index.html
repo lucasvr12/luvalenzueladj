@@ -102,37 +102,68 @@
                         <div class="slide-text" id="slide-text">desliza para desbloquear</div>
                     </div>
                 </div>
+
+                <!-- Botón de Entrada Rápida para Desktop (Oculto en móviles por CSS) -->
+                <button class="ios-desktop-unlock-btn" id="btn-desktop-unlock">
+                    🔓 Entrar al Press Kit
+                </button>
             </div>
 
             <!-- 3. PANTALLA DE INICIO (Home Screen) -->
             <div class="ios-home-screen hidden" id="home-screen">
                 <!-- Cuadrícula de Apps (Icons Grid) -->
                 <div class="apps-grid">
-                    <!-- App 1: Notas (Biografía) -->
-                    <div class="app-icon-wrapper" data-app="app-notes">
-                        <div class="app-icon icon-notes">
+                    <!-- App 1: Calendario (Dinámico) -->
+                    <div class="app-icon-wrapper" data-app="app-calendar">
+                        <div class="app-icon icon-calendar-dynamic" style="background-image: url('assets/calendario.png'); background-size: cover;">
+                            <span class="calendar-icon-month" id="icon-cal-month">JUL</span>
+                            <span class="calendar-icon-day" id="icon-cal-day">17</span>
                             <div class="glossy-shine"></div>
                         </div>
-                        <span class="app-label">Notas</span>
+                        <span class="app-label">Calendario</span>
                     </div>
 
-                    <!-- App 2: Fotos (Galería) -->
+                    <!-- App 2: Fotos (Girasol) -->
                     <div class="app-icon-wrapper" data-app="app-photos">
-                        <div class="app-icon icon-photos">
+                        <div class="app-icon" style="background-image: url('assets/fotos.png'); background-size: cover;">
                             <div class="glossy-shine"></div>
                         </div>
                         <span class="app-label">Fotos</span>
                     </div>
 
-                    <!-- App 3: YouTube (Sets de Video) -->
+                    <!-- App 3: YouTube (Televisor) -->
                     <div class="app-icon-wrapper" data-app="app-youtube">
-                        <div class="app-icon icon-youtube">
+                        <div class="app-icon" style="background-image: url('assets/youtube.png'); background-size: cover;">
                             <div class="glossy-shine"></div>
                         </div>
                         <span class="app-label">YouTube</span>
                     </div>
 
-                    <!-- App 4: Safari (Redes Oficiales) -->
+                    <!-- App 4: Clima (Weather) -->
+                    <div class="app-icon-wrapper" data-app="app-weather">
+                        <div class="app-icon" style="background-image: url('assets/clima.png'); background-size: cover;">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Clima</span>
+                    </div>
+
+                    <!-- App 5: Notas (Libreta) -->
+                    <div class="app-icon-wrapper" data-app="app-notes">
+                        <div class="app-icon" style="background-image: url('assets/notas.png'); background-size: cover;">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Notas</span>
+                    </div>
+
+                    <!-- App 6: Mensajes (iMessage) -->
+                    <div class="app-icon-wrapper" data-app="app-imessage">
+                        <div class="app-icon" style="background-image: url('assets/imessage.png'); background-size: cover;">
+                            <div class="glossy-shine"></div>
+                        </div>
+                        <span class="app-label">Mensajes</span>
+                    </div>
+
+                    <!-- App 7: Safari (Explorador) -->
                     <div class="app-icon-wrapper" data-app="app-safari">
                         <div class="app-icon icon-safari">
                             <div class="glossy-shine"></div>
@@ -419,17 +450,21 @@
                 </div>
             </div>
 
-            <!-- APP E: NOTAS (Biografía del DJ) -->
+            <!-- APP E: NOTAS (Biografía del DJ & Press Kit Visor) -->
             <div class="ios-app-window hidden" id="app-notes">
-                <!-- Header de Notas con Cuero -->
-                <div class="app-header notes-header">
+                <!-- Header de Notas con Selector de Pestañas -->
+                <div class="app-header notes-header" style="justify-content: space-between; gap: 8px;">
                     <button class="ios-btn home-back-btn" style="background: linear-gradient(to bottom, #d69830 0%, #b37318 100%); border-color: #804f0d;">🏠 Home</button>
-                    <h2 class="app-title font-marker">Notas</h2>
-                    <div style="width: 50px;"></div>
+                    <!-- Selector de Vista: Bio vs Press Kit -->
+                    <div style="display: flex; gap: 6px; flex-grow: 1; justify-content: center; max-width: 180px;">
+                        <button class="ios-btn active" id="btn-note-bio" style="background: linear-gradient(to bottom, #fce0a2 0%, #e2ab39 100%); color: #4a3e20; border-color: #a07010; font-size: 11px;">Biografía</button>
+                        <button class="ios-btn" id="btn-note-pdf" style="background: linear-gradient(to bottom, #f5f5f5 0%, #d8d8d8 100%); color: #666; border-color: #aaa; font-size: 11px;">Press Kit PDF</button>
+                    </div>
+                    <div style="width: 52px; display: inline-block;"></div>
                 </div>
                 
-                <!-- Bloc de Notas Amarillo Lino Rayado -->
-                <div class="app-content notes-yellow-pad">
+                <!-- Contenido 1: Bloc de Notas Amarillo Lino Rayado (Biografía) -->
+                <div class="app-content notes-yellow-pad" id="note-bio-content">
                     <div class="notes-leather-header">
                         <div class="notes-metal-rings"></div>
                     </div>
@@ -437,7 +472,7 @@
                         <!-- Fecha de la Nota -->
                         <div class="note-date-stamp" id="note-date-stamp">26 de Mayo de 2026, 11:30 PM</div>
                         
-                        <!-- Biografía Redactada en Fuente Marker Felt o Amigable -->
+                        <!-- Biografía Redactada -->
                         <div class="note-text-body font-marker">
                             <h2 class="note-bio-title">Biografía - DJ Lu Valenzuela</h2>
                             <p class="note-paragraph">
@@ -453,6 +488,138 @@
                                 Influencias: Carl Cox, Green Velvet, Marco Carola, Loco Dice y la elegancia clásica de Daft Punk.
                             </p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Contenido 2: Visor de PDF Integrado -->
+                <div class="app-content notes-pdf-pad hidden" id="note-pdf-content" style="background: #525659; display: flex; flex-direction: column; height: 100%;">
+                    <iframe 
+                        src="docs/presskit_dj_lu_valenzuela.pdf#toolbar=0&navpanes=0&scrollbar=1" 
+                        style="width: 100%; height: 100%; border: none;"
+                        title="Press Kit PDF Visor">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- APP NEW 1: CALENDARIO -->
+            <div class="ios-app-window hidden" id="app-calendar">
+                <div class="app-header">
+                    <button class="ios-btn home-back-btn">🏠 Home</button>
+                    <h2 class="app-title">Calendario</h2>
+                    <div style="width: 50px;"></div>
+                </div>
+                <div class="app-content calendar-app-content" style="background: #eef1f5; overflow-y: auto; height: 100%;">
+                    <!-- Cabecera de Mes -->
+                    <div class="calendar-month-banner" style="background: linear-gradient(to bottom, #e23e3e 0%, #ba2020 100%); color: #fff; text-align: center; padding: 12px; font-weight: bold; font-size: 18px; text-shadow: 0 -1px 0 rgba(0,0,0,0.4); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.15);">
+                        <span id="calendar-current-month-banner">Julio 2026</span>
+                    </div>
+                    
+                    <!-- Calendario Grid -->
+                    <div class="calendar-grid-container" style="padding: 10px; background: #fff; border-bottom: 1px solid #c8c7cc;">
+                        <div class="calendar-weekdays" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; font-weight: bold; color: #a25252; margin-bottom: 8px;">
+                            <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+                        </div>
+                        <div class="calendar-days-grid" id="calendar-days-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); grid-gap: 4px; text-align: center; font-size: 14px;">
+                            <!-- Inyectado dinámicamente con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Lista de Eventos/Gigs -->
+                    <div class="calendar-events-section" style="padding: 15px 12px;">
+                        <h3 style="font-size: 13px; color: #6f7b8a; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; text-shadow: 0 1px 0 #fff;">Próximos Gigs / Eventos</h3>
+                        <div class="calendar-events-list" id="calendar-events-list">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP NEW 2: CLIMA (Monterrey, NL) -->
+            <div class="ios-app-window hidden" id="app-weather">
+                <div class="app-header" style="background: linear-gradient(to bottom, #5082b9 0%, #2f598c 100%); border-bottom: 1px solid #1f3d63;">
+                    <button class="ios-btn home-back-btn" style="background: linear-gradient(to bottom, #729ecb 0%, #406f9e 100%); border-color: #274d75;">🏠 Home</button>
+                    <h2 class="app-title" style="color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,0.4);">Clima</h2>
+                    <div style="width: 50px;"></div>
+                </div>
+                <div class="app-content weather-app-content" style="background: linear-gradient(to bottom, #3a689c 0%, #1a3254 100%); color: #fff; text-align: center; overflow-y: auto; height: 100%; padding: 20px 10px;">
+                    <h1 style="font-size: 24px; font-weight: 300; margin: 0; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Monterrey</h1>
+                    <span style="font-size: 12px; opacity: 0.8; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Despejado</span>
+                    
+                    <!-- Gran temperatura skeuomórfica -->
+                    <div style="font-size: 82px; font-weight: 100; margin: 10px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.4); font-family: 'Helvetica Neue', Arial, sans-serif; position: relative; display: inline-block;">
+                        32<span style="font-size: 38px; position: absolute; top: 12px; right: -25px;">°</span>
+                    </div>
+
+                    <!-- Detalles del Clima de Hoy -->
+                    <div class="weather-today-details" style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px; margin: 15px 5px; font-size: 12px; text-shadow: 0 1px 1px rgba(0,0,0,0.5);">
+                        <div>
+                            <span style="display: block; opacity: 0.7;">Humedad</span>
+                            <strong style="font-size: 14px;">42%</strong>
+                        </div>
+                        <div>
+                            <span style="display: block; opacity: 0.7;">Viento</span>
+                            <strong style="font-size: 14px;">12 km/h</strong>
+                        </div>
+                        <div>
+                            <span style="display: block; opacity: 0.7;">Sensación</span>
+                            <strong style="font-size: 14px;">35°C</strong>
+                        </div>
+                    </div>
+
+                    <!-- Pronóstico de 5 Días -->
+                    <div class="weather-forecast-list" style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 5px 12px; margin: 0 5px; text-align: left; font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="width: 80px;">Miércoles</span>
+                            <span style="font-size: 18px;">☀️</span>
+                            <span style="width: 60px; text-align: right;">34° / 22°</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="width: 80px;">Jueves</span>
+                            <span style="font-size: 18px;">☀️</span>
+                            <span style="width: 60px; text-align: right;">36° / 23°</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="width: 80px;">Viernes</span>
+                            <span style="font-size: 18px;">⛅</span>
+                            <span style="width: 60px; text-align: right;">33° / 21°</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="width: 80px;">Sábado</span>
+                            <span style="font-size: 18px;">🌧️</span>
+                            <span style="width: 60px; text-align: right;">29° / 19°</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                            <span style="width: 80px;">Domingo</span>
+                            <span style="font-size: 18px;">☀️</span>
+                            <span style="width: 60px; text-align: right;">32° / 20°</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APP NEW 3: IMESSAGE (Chat con DJ Ficticio) -->
+            <div class="ios-app-window hidden" id="app-imessage">
+                <!-- Cabecera estilo iOS 6 Mensajes -->
+                <div class="app-header messages-header" style="background: linear-gradient(to bottom, #7ba2c5 0%, #467098 100%); border-bottom: 1px solid #284664; justify-content: space-between; align-items: center;">
+                    <button class="ios-btn home-back-btn" style="background: linear-gradient(to bottom, #8bb1d3 0%, #5980a8 100%); border-color: #3b5f85; color: #fff;">🏠 Home</button>
+                    <div style="text-align: center; color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,0.4); line-height: 1.2;">
+                        <div style="font-weight: bold; font-size: 14px;">DJ Random</div>
+                        <div style="font-size: 10px; opacity: 0.8;">iMessage</div>
+                    </div>
+                    <button class="ios-btn text-btn" style="background: linear-gradient(to bottom, #8bb1d3 0%, #5980a8 100%); border-color: #3b5f85; color: #fff; font-size: 11px;">Contacto</button>
+                </div>
+                
+                <!-- Cuerpo del Chat -->
+                <div class="app-content imessage-content" style="background: #e5e5ea; display: flex; flex-direction: column; height: 100%; justify-content: space-between; overflow: hidden;">
+                    <div class="imessage-history" id="imessage-history" style="flex-grow: 1; padding: 15px 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Mensajes divertidos inyectados por JS o estáticos -->
+                    </div>
+                    
+                    <!-- Barra de Texto inferior de iOS 6 -->
+                    <div class="imessage-input-bar" style="background: linear-gradient(to bottom, #dbdbdb 0%, #b8b8b8 100%); border-top: 1px solid #999; padding: 6px; display: flex; gap: 8px; align-items: center;">
+                        <button style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid #999; background: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #555;">📷</button>
+                        <input type="text" id="imessage-input" placeholder="iMessage" style="flex-grow: 1; height: 30px; border-radius: 15px; border: 1px solid #a3a3a3; padding: 0 12px; font-size: 14px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);">
+                        <button id="imessage-send-btn" style="background: linear-gradient(to bottom, #3082ec 0%, #0e56c5 100%); border: 1px solid #0b45a0; color: #fff; font-weight: bold; border-radius: 14px; height: 28px; padding: 0 14px; font-size: 12px; text-shadow: 0 -1px 0 rgba(0,0,0,0.4); box-shadow: 0 1px 0 rgba(255,255,255,0.2); cursor: pointer;">Enviar</button>
                     </div>
                 </div>
             </div>
