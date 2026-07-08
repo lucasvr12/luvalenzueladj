@@ -263,10 +263,12 @@ document.addEventListener("DOMContentLoaded", () => {
         slideHandle.addEventListener("touchstart", dragStart, { passive: false });
         slideHandle.addEventListener("touchmove", dragMove, { passive: false });
         slideHandle.addEventListener("touchend", dragEnd);
+        slideHandle.addEventListener("touchcancel", dragEnd);
         
         // También dar soporte por si el dedo se sale ligeramente del botón
         slideTrack.addEventListener("touchmove", dragMove, { passive: false });
         slideTrack.addEventListener("touchend", dragEnd);
+        slideTrack.addEventListener("touchcancel", dragEnd);
 
         // Obtener coordenada X de forma robusta e inmune a fallas de índice
         function getClientX(e) {
@@ -279,11 +281,15 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.changedTouches && e.changedTouches.length > 0) {
                 return e.changedTouches[0].clientX;
             }
-            return e.clientX;
+            return e.clientX || 0;
         }
 
         function dragStart(e) {
-            initAudioContext();
+            try {
+                initAudioContext();
+            } catch(err) {
+                console.warn("Audio error ignored on drag start", err);
+            }
             
             // Forzar actualización de límites al presionar
             updateMaxDrag();

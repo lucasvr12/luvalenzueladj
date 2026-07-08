@@ -402,6 +402,7 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
+    touch-action: none; /* Prevenir scroll nativo al deslizar */
 }
 
 .slide-handle {
@@ -421,6 +422,7 @@ body {
     cursor: grab;
     z-index: 100; /* Alto z-index para estar por encima de todo */
     transition: transform 0.05s ease;
+    touch-action: none; /* Bloquear gestos nativos del navegador */
 }
 
 .slide-handle:active {
@@ -2240,6 +2242,7 @@ body {
         padding: 0 !important;
         overflow: hidden !important;
         background: #000 !important;
+        display: block !important; /* Evitar que el flex centre y deje un gap arriba/abajo */
     }
     
     .iphone-device-frame {
