@@ -849,6 +849,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Álbum 2: Gigs (Screenshots de Instagram)
     const gigsPhotos = [
+        { src: "photos/gigs/patio_barrio_11_07.png", caption: "Próximo Evento - Patio Barrio (Sábado 11 de Julio)" },
         { src: "photos/gigs/Screenshot_20260707_134034_Instagram.jpg", caption: "Gig de Instagram @luvalenzueladj" },
         { src: "photos/gigs/Screenshot_20260707_134036_Instagram.jpg", caption: "Live Mix Promo" },
         { src: "photos/gigs/Screenshot_20260707_134046_Instagram.jpg", caption: "Club Set - Monterrey Sessions" },
@@ -1165,10 +1166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Lista de Gigs (Julio 2026)
     const gigsList = [
-        { day: 10, title: "Club Room Session - Warm Up", loc: "Monterrey, Nuevo León", time: "10:00 PM" },
-        { day: 17, title: "Showcase Sunset Terrace - Headliner Set", loc: "Monterrey, Nuevo León", time: "11:30 PM" },
-        { day: 24, title: "Tech House Warehouse Rave", loc: "Guadalajara, Jalisco", time: "01:00 AM" },
-        { day: 31, title: "Private Pool Party Session", loc: "Santiago, Nuevo León", time: "06:00 PM" }
+        { day: 11, title: "Patio Barrio - Barrio Antiguo", loc: "Monterrey, Nuevo León", time: "12:00 AM - 01:00 AM" }
     ];
 
     function initCalendar() {
@@ -1255,12 +1253,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const imessageSendBtn = document.getElementById("imessage-send-btn");
 
     const chatScript = [
-        { type: "timestamp", text: "Martes 10:24 PM" },
-        { type: "received", text: "Oye bro, ¿puedes abrir con algo más tranquilo? Estás tocando demasiado duro y la gente ya está muy activa para mi set..." },
-        { type: "sent", text: "Jaja bro, la pista manda. El groove de Tech House no se frena 🎛️⚡" },
-        { type: "received", text: "Pero es que tocaste mi remix inédito!!" },
-        { type: "sent", text: "Una disculpa, bro, sonaba demasiado bien como para guardarla 😉" },
-        { type: "received", text: "jajaja bueno, me debes una cerveza en el backstage." }
+        { type: "timestamp", text: "Hoy 12:45 PM" },
+        { type: "received", text: "Qué onda bro! Vi que tocas este sábado 11 en Patio Barrio, ¿a qué hora sales?" },
+        { type: "sent", text: "¡Qué onda! Sí, toco en el Barrio Antiguo de 12:00 AM a 1:00 AM ⚡. ¡Va a estar con madre!" },
+        { type: "received", text: "Uff finísimo, ¿me metes a tu lista de invitados con unos compas? 🎟️" },
+        { type: "sent", text: "Claro bro, ya quedaron anotados. Avísame cuando lleguen al acceso para pasarlos al backstage." },
+        { type: "received", text: "¡De lujo bro! Ahí nos vemos sin falta para escuchar ese set de Tech House" }
     ];
 
     function loadMessageHistory() {
@@ -1324,11 +1322,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Auto-respuesta humorística aleatoria del DJ Random después de 1.5s
         setTimeout(() => {
             const randomAnswers = [
-                "Ya ando en la cabina, apúrate para el cambio de DJ! 🎧",
-                "Oye ese bajo se escucha brutal hasta el baño, qué canción es?",
-                "¿Me dejas tocar la última canción contigo? Hacemos B2B 🙌",
-                "La rompiste bro! Excelente set.",
-                "Pasa el playlist porfa!"
+                "Nos vemos este sábado en Patio Barrio! ⚡",
+                "Ya estoy armando el grupo para ir, va a estar con madre 🙌",
+                "Acuérdate de guardar mi entrada bro, no me lo pierdo por nada!",
+                "Qué set vas a armar? Tiras Tech House duro!! 🎧",
+                "¿Me puedes pasar el tracklist después del set?"
             ];
             const responseText = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
             
