@@ -254,15 +254,19 @@ document.addEventListener("DOMContentLoaded", () => {
         updateMaxDrag();
         window.addEventListener("resize", updateMaxDrag);
 
-        // Eventos mouse
+        // Eventos mouse (Computadora)
         slideHandle.addEventListener("mousedown", dragStart);
         document.addEventListener("mousemove", dragMove);
         document.addEventListener("mouseup", dragEnd);
 
-        // Eventos táctiles (móvil)
+        // Eventos táctiles (Móviles - Vinculados directamente al Handle para evitar bloqueos pasivos)
         slideHandle.addEventListener("touchstart", dragStart, { passive: false });
-        document.addEventListener("touchmove", dragMove, { passive: false });
-        document.addEventListener("touchend", dragEnd);
+        slideHandle.addEventListener("touchmove", dragMove, { passive: false });
+        slideHandle.addEventListener("touchend", dragEnd);
+        
+        // También dar soporte por si el dedo se sale ligeramente del botón
+        slideTrack.addEventListener("touchmove", dragMove, { passive: false });
+        slideTrack.addEventListener("touchend", dragEnd);
 
         function dragStart(e) {
             initAudioContext();
@@ -276,8 +280,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Obtener coordenadas
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             
-            // Prevenir drag de imagen fantasma del navegador
-            e.preventDefault();
+            // Prevenir drag de imagen nativo sólo en escritorio para no bloquear touchstarts
+            if (!e.touches) {
+                e.preventDefault();
+            }
             
             startX = clientX - currentX;
         }
@@ -285,8 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
         function dragMove(e) {
             if (!isDragging) return;
             
-            // Evitar scrolls raros en móviles
-            if (e.cancelable) e.preventDefault();
+            // Prevenir scroll de fondo en móviles al arrastrar el slider
+            if (e.cancelable) {
+                e.preventDefault();
+            }
             
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             let x = clientX - startX;
@@ -316,7 +324,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 slideHandle.style.transform = "translateX(0px)";
                 slideText.style.transition = "opacity 0.25s ease";
                 slideText.style.opacity = "1";
-                currentX = 0;
             }
         }
 
