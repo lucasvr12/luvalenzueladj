@@ -1111,11 +1111,81 @@ document.addEventListener("DOMContentLoaded", () => {
     // 9. LÓGICA DE LAS NUEVAS APPS (Notas PDF, Clima, Calendario, iMessage)
     // ==========================================================================
 
-    /* A. NOTAS: Alternar entre Libreta de Biografía y Visor PDF */
+    /* A. NOTAS: Alternar entre Libreta de Biografía y Visor PDF (Mobile-friendly con PDF.js) */
     const btnNoteBio = document.getElementById("btn-note-bio");
     const btnNotePdf = document.getElementById("btn-note-pdf");
     const noteBioContent = document.getElementById("note-bio-content");
     const notePdfContent = document.getElementById("note-pdf-content");
+    
+    let pdfLoaded = false;
+    
+    function loadPdfPressKit() {
+        if (pdfLoaded) return;
+        
+        const container = document.getElementById("pdf-pages-container");
+        const loading = document.getElementById("pdf-loading-indicator");
+        
+        if (!container) return;
+        
+        const pdfUrl = "docs/presskit_dj_lu_valenzuela.pdf";
+        
+        // Cargar librería
+        const pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+        if (!pdfjsLib) {
+            if (loading) loading.textContent = "Error: Cargador de PDF no disponible.";
+            return;
+        }
+        
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            if (loading) loading.style.display = "none";
+            pdfLoaded = true;
+            
+            // Renderizar secuencialmente las páginas para evitar fallos de memoria en móviles
+            let renderPage = (pageNum) => {
+                if (pageNum > pdf.numPages) return;
+                
+                pdf.getPage(pageNum).then(page => {
+                    const canvas = document.createElement("canvas");
+                    canvas.className = "pdf-page-canvas";
+                    canvas.style.width = "100%";
+                    canvas.style.height = "auto";
+                    canvas.style.maxWidth = "480px";
+                    canvas.style.boxShadow = "0 3px 10px rgba(0,0,0,0.5)";
+                    canvas.style.borderRadius = "3px";
+                    canvas.style.marginBottom = "15px";
+                    canvas.style.backgroundColor = "#fff";
+                    container.appendChild(canvas);
+                    
+                    const ctx = canvas.getContext("2d");
+                    
+                    // Escala 1.5 para buena resolución en móvil sin consumir mucha memoria
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    
+                    page.render(renderContext).promise.then(() => {
+                        // Siguiente página
+                        renderPage(pageNum + 1);
+                    }).catch(err => {
+                        console.error("Error al renderizar página:", err);
+                        renderPage(pageNum + 1); // Intentar la siguiente
+                    });
+                });
+            };
+            
+            renderPage(1);
+        }).catch(err => {
+            console.error("Error cargando PDF con PDF.js:", err);
+            if (loading) loading.textContent = "Error al visualizar el PDF. Usa el botón de descarga en la App de Teléfono.";
+        });
+    }
 
     if (btnNoteBio && btnNotePdf) {
         btnNoteBio.addEventListener("click", () => {
@@ -1156,6 +1226,9 @@ document.addEventListener("DOMContentLoaded", () => {
             // Contenidos
             noteBioContent.classList.add("hidden");
             notePdfContent.classList.remove("hidden");
+            
+            // Cargar y renderizar PDF nativamente
+            loadPdfPressKit();
         });
     }
 

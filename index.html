@@ -491,13 +491,13 @@
                     </div>
                 </div>
 
-                <!-- Contenido 2: Visor de PDF Integrado -->
-                <div class="app-content notes-pdf-pad hidden" id="note-pdf-content" style="background: #525659; display: flex; flex-direction: column; height: 100%;">
-                    <iframe 
-                        src="docs/presskit_dj_lu_valenzuela.pdf#toolbar=0&navpanes=0&scrollbar=1" 
-                        style="width: 100%; height: 100%; border: none;"
-                        title="Press Kit PDF Visor">
-                    </iframe>
+                <!-- Contenido 2: Visor de PDF Integrado con PDF.js (Mobile-friendly) -->
+                <div class="app-content notes-pdf-pad hidden" id="note-pdf-content" style="background: #333; display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+                    <div id="pdf-pages-container" style="width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 15px 10px; -webkit-overflow-scrolling: touch;">
+                        <div id="pdf-loading-indicator" style="color: #eee; font-family: sans-serif; font-size: 13px; margin-top: 30px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                            ⏳ Cargando Press Kit...
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -712,6 +712,8 @@
         </div>
     </div>
 
+    <!-- PDF.js para renderizar el PDF nativamente en móvil y desktop sin salir del sitio -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <!-- Integración del JavaScript Maestro -->
     <script src="js/app.js"></script>
 </body>
