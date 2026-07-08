@@ -419,7 +419,7 @@ body {
     justify-content: center;
     align-items: center;
     cursor: grab;
-    z-index: 10;
+    z-index: 100; /* Alto z-index para estar por encima de todo */
     transition: transform 0.05s ease;
 }
 
@@ -447,6 +447,8 @@ body {
     -webkit-text-fill-color: transparent;
     animation: textShimmer 2.5s infinite linear;
     padding-left: 60px; /* Para que libre la manija al inicio */
+    pointer-events: none; /* Dejar pasar los clicks/toques al handle */
+    z-index: 1;
 }
 
 @keyframes textShimmer {
@@ -2250,10 +2252,7 @@ body {
         box-shadow: none !important;
         border: none !important;
         overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-        align-items: stretch !important;
+        position: relative !important; /* Permitir absolute layout interior */
     }
     
     .iphone-top-hardware, 
@@ -2264,11 +2263,16 @@ body {
     .iphone-screen-viewport {
         border-radius: 0 !important;
         border: none !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         height: 100% !important;
+        height: 100dvh !important;
         width: 100% !important;
         overflow: hidden !important;
         display: flex !important;
         flex-direction: column !important;
+        z-index: 10 !important;
     }
 
     /* Evitar que las barras de navegación del navegador empujen o corten el contenido */

@@ -268,6 +268,20 @@ document.addEventListener("DOMContentLoaded", () => {
         slideTrack.addEventListener("touchmove", dragMove, { passive: false });
         slideTrack.addEventListener("touchend", dragEnd);
 
+        // Obtener coordenada X de forma robusta e inmune a fallas de índice
+        function getClientX(e) {
+            if (e.touches && e.touches.length > 0) {
+                return e.touches[0].clientX;
+            }
+            if (e.targetTouches && e.targetTouches.length > 0) {
+                return e.targetTouches[0].clientX;
+            }
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                return e.changedTouches[0].clientX;
+            }
+            return e.clientX;
+        }
+
         function dragStart(e) {
             initAudioContext();
             
@@ -277,11 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
             isDragging = true;
             slideHandle.style.transition = "none";
             
-            // Obtener coordenadas
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientX = getClientX(e);
             
             // Prevenir drag de imagen nativo sólo en escritorio para no bloquear touchstarts
-            if (!e.touches) {
+            if (!e.touches && !e.targetTouches) {
                 e.preventDefault();
             }
             
@@ -291,12 +304,12 @@ document.addEventListener("DOMContentLoaded", () => {
         function dragMove(e) {
             if (!isDragging) return;
             
-            // Prevenir scroll de fondo en móviles al arrastrar el slider
-            if (e.cancelable) {
+            // Prevenir scroll de fondo en móviles al arrastrar el slider obligatoriamente
+            if (e.cancelable !== false) {
                 e.preventDefault();
             }
             
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientX = getClientX(e);
             let x = clientX - startX;
             
             // Limitar arrastre
@@ -324,8 +337,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 slideHandle.style.transform = "translateX(0px)";
                 slideText.style.transition = "opacity 0.25s ease";
                 slideText.style.opacity = "1";
+                currentX = 0; // resetear valor
             }
         }
+
 
         function unlockiPhone() {
             // Animación final de desbloqueo
