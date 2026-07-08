@@ -2099,6 +2099,7 @@ body {
     border-radius: 50%;
     cursor: pointer;
     position: relative;
+    color: #333;
 }
 
 .calendar-day-cell.inactive {
