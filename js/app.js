@@ -1353,6 +1353,170 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    updateCalendarIconDate();
-});
+    /* E. FLAPPY DJ MINIGAME */
+    const flappyCanvas = document.getElementById('flappy-canvas');
+    const flappyStartScreen = document.getElementById('flappy-start-screen');
+    const flappyGameOverScreen = document.getElementById('flappy-game-over');
+    const flappyStartBtn = document.getElementById('flappy-start-btn');
+    const flappyRestartBtn = document.getElementById('flappy-restart-btn');
+    const flappyScoreEl = document.getElementById('flappy-final-score');
+    
+    if (flappyCanvas) {
+        const ctx = flappyCanvas.getContext('2d');
+        let frames = 0;
+        let score = 0;
+        let gameRunning = false;
+        let flappyLoopId = null;
+        
+        function resizeFlappy() {
+            flappyCanvas.width = flappyCanvas.clientWidth || 320;
+            flappyCanvas.height = flappyCanvas.clientHeight || 480;
+        }
+        window.addEventListener('resize', resizeFlappy);
+        
+        const bird = {
+            x: 50, y: 150, width: 34, height: 34,
+            gravity: 0.4, jump: 7.0, velocity: 0,
+            draw: function() {
+                ctx.font = "34px Arial";
+                ctx.fillText("🎧", this.x, this.y + this.height - 4);
+            },
+            update: function() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                if(this.y + this.height >= flappyCanvas.height) {
+                    this.y = flappyCanvas.height - this.height;
+                    gameOver();
+                }
+                if(this.y < 0) {
+                    this.y = 0;
+                    this.velocity = 0;
+                }
+            },
+            flap: function() {
+                this.velocity = -this.jump;
+            }
+        };
 
+        const pipes = {
+            position: [],
+            width: 50,
+            gap: 150,
+            dx: 2.5,
+            draw: function() {
+                for(let i=0; i<this.position.length; i++){
+                    let p = this.position[i];
+                    let topYPos = p.y;
+                    let bottomYPos = p.y + this.gap;
+                    
+                    // Top pipe
+                    ctx.fillStyle = "#8a2be2"; 
+                    ctx.fillRect(p.x, 0, this.width, topYPos);
+                    ctx.fillStyle = "#6a1b9a";
+                    ctx.fillRect(p.x - 2, topYPos - 20, this.width + 4, 20); 
+                    
+                    // Bottom pipe
+                    ctx.fillStyle = "#8a2be2";
+                    ctx.fillRect(p.x, bottomYPos, this.width, flappyCanvas.height - bottomYPos);
+                    ctx.fillStyle = "#6a1b9a";
+                    ctx.fillRect(p.x - 2, bottomYPos, this.width + 4, 20); 
+                }
+            },
+            update: function() {
+                if(frames % 100 == 0){
+                    this.position.push({
+                        x: flappyCanvas.width,
+                        y: Math.random() * (flappyCanvas.height - this.gap - 100) + 50
+                    });
+                }
+                for(let i=0; i<this.position.length; i++){
+                    let p = this.position[i];
+                    p.x -= this.dx;
+                    
+                    // Collision (with a little leniency)
+                    if(bird.x + bird.width - 5 > p.x && bird.x + 5 < p.x + this.width &&
+                       (bird.y + 5 < p.y || bird.y + bird.height - 5 > p.y + this.gap)) {
+                        gameOver();
+                    }
+                    
+                    if(p.x + this.width < 0){
+                        this.position.shift();
+                        score++;
+                        i--;
+                    }
+                }
+            },
+            reset: function() {
+                this.position = [];
+            }
+        };
+
+        function drawScore() {
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 40px 'Marker Felt', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(score, flappyCanvas.width/2, 60);
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 2;
+            ctx.strokeText(score, flappyCanvas.width/2, 60);
+            ctx.textAlign = "left"; 
+        }
+
+        function loop() {
+            if(!gameRunning) return;
+            ctx.fillStyle = "#71c5cf";
+            ctx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+            
+            pipes.draw();
+            pipes.update();
+            bird.draw();
+            bird.update();
+            drawScore();
+            
+            frames++;
+            flappyLoopId = requestAnimationFrame(loop);
+        }
+
+        function resetGame() {
+            bird.y = 150;
+            bird.velocity = 0;
+            pipes.reset();
+            score = 0;
+            frames = 0;
+            flappyGameOverScreen.classList.add('hidden');
+            flappyStartScreen.classList.add('hidden');
+        }
+
+        function startGame() {
+            initAudioContext();
+            if(audioPlayer.paused) {
+                playTrack(); // Start iPod music
+            }
+            resizeFlappy();
+            resetGame();
+            gameRunning = true;
+            if (flappyLoopId) cancelAnimationFrame(flappyLoopId);
+            loop();
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            flappyScoreEl.textContent = score;
+            flappyGameOverScreen.classList.remove('hidden');
+        }
+
+        if (flappyStartBtn) flappyStartBtn.addEventListener('click', startGame);
+        if (flappyRestartBtn) flappyRestartBtn.addEventListener('click', startGame);
+
+        flappyCanvas.addEventListener('mousedown', () => { if(gameRunning) { initAudioContext(); bird.flap(); } });
+        flappyCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); if(gameRunning) { initAudioContext(); bird.flap(); } }, {passive: false});
+        
+        // Initial static drawing
+        setTimeout(() => {
+            resizeFlappy();
+            ctx.fillStyle = "#71c5cf";
+            ctx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+            bird.draw();
+        }, 300);
+    }
+});
