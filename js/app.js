@@ -1389,7 +1389,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener('resize', resizeFlappy);
         
         const bird = {
-            x: 50, y: 150, width: 45, height: 45,
+            x: 50, y: 150, width: 65, height: 65,
             gravity: 0.4, jump: 7.0, velocity: 0,
             draw: function() {
                 if (flappyBirdImg.complete) {
@@ -1455,9 +1455,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     let p = this.position[i];
                     p.x -= this.dx;
                     
-                    // Collision (with a little leniency)
-                    if(bird.x + bird.width - 5 > p.x && bird.x + 5 < p.x + this.width &&
-                       (bird.y + 5 < p.y || bird.y + bird.height - 5 > p.y + this.gap)) {
+                    // Collision (with a little leniency for transparent edges)
+                    if(bird.x + bird.width - 10 > p.x && bird.x + 10 < p.x + this.width &&
+                       (bird.y + 10 < p.y || bird.y + bird.height - 10 > p.y + this.gap)) {
                         gameOver();
                     }
                     
