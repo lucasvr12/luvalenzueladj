@@ -1369,7 +1369,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let flappyLoopId = null;
         
         const flappyBirdImg = new Image();
-        flappyBirdImg.src = 'assets/personaje_1.png';
+        flappyBirdImg.src = 'assets/personaje_1_sin_fondo.png';
         
         const particles = [];
         for(let i=0; i<35; i++){
