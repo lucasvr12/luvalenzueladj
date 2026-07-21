@@ -1368,6 +1368,17 @@ document.addEventListener("DOMContentLoaded", () => {
         let gameRunning = false;
         let flappyLoopId = null;
         
+        const particles = [];
+        for(let i=0; i<35; i++){
+            particles.push({
+                x: Math.random() * 400,
+                y: Math.random() * 800,
+                r: Math.random() * 2.5 + 1,
+                s: Math.random() * 1.5 + 0.5,
+                c: Math.random() > 0.5 ? '#00f3ff' : '#ff007f'
+            });
+        }
+        
         function resizeFlappy() {
             flappyCanvas.width = flappyCanvas.clientWidth || 320;
             flappyCanvas.height = flappyCanvas.clientHeight || 480;
@@ -1409,18 +1420,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     let topYPos = p.y;
                     let bottomYPos = p.y + this.gap;
                     
+                    // Neon Gradient
+                    let grad = ctx.createLinearGradient(p.x, 0, p.x + this.width, 0);
+                    grad.addColorStop(0, "#ff007f");
+                    grad.addColorStop(0.5, "#ff80df"); 
+                    grad.addColorStop(1, "#ff007f");
+
+                    ctx.shadowColor = '#ff007f';
+                    ctx.shadowBlur = 15;
+                    ctx.fillStyle = grad;
+                    
                     // Top pipe
-                    ctx.fillStyle = "#8a2be2"; 
                     ctx.fillRect(p.x, 0, this.width, topYPos);
-                    ctx.fillStyle = "#6a1b9a";
-                    ctx.fillRect(p.x - 2, topYPos - 20, this.width + 4, 20); 
+                    ctx.fillRect(p.x - 3, topYPos - 15, this.width + 6, 15); // Cap
                     
                     // Bottom pipe
-                    ctx.fillStyle = "#8a2be2";
                     ctx.fillRect(p.x, bottomYPos, this.width, flappyCanvas.height - bottomYPos);
-                    ctx.fillStyle = "#6a1b9a";
-                    ctx.fillRect(p.x - 2, bottomYPos, this.width + 4, 20); 
+                    ctx.fillRect(p.x - 3, bottomYPos, this.width + 6, 15); // Cap
                 }
+                ctx.shadowBlur = 0; // reset
             },
             update: function() {
                 if(frames % 100 == 0){
@@ -1464,8 +1482,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function loop() {
             if(!gameRunning) return;
-            ctx.fillStyle = "#71c5cf";
+            
+            // Cyberpunk Dark Gradient Background
+            let bgGrad = ctx.createLinearGradient(0, 0, 0, flappyCanvas.height);
+            bgGrad.addColorStop(0, "#0b001a");
+            bgGrad.addColorStop(1, "#2a0033");
+            ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+            
+            // Draw floating glowing particles (club lights)
+            particles.forEach(pt => {
+                ctx.shadowColor = pt.c;
+                ctx.shadowBlur = 8;
+                ctx.fillStyle = pt.c;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI*2);
+                ctx.fill();
+                if(gameRunning) pt.x -= pt.s; // Parallax scroll
+                if(pt.x < -10) { pt.x = flappyCanvas.width + 10; pt.y = Math.random() * flappyCanvas.height; }
+            });
+            ctx.shadowBlur = 0;
             
             pipes.draw();
             pipes.update();
@@ -1514,7 +1550,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Initial static drawing
         setTimeout(() => {
             resizeFlappy();
-            ctx.fillStyle = "#71c5cf";
+            let bgGrad = ctx.createLinearGradient(0, 0, 0, flappyCanvas.height);
+            bgGrad.addColorStop(0, "#0b001a");
+            bgGrad.addColorStop(1, "#2a0033");
+            ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
             bird.draw();
         }, 300);
