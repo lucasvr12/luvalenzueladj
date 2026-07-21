@@ -1368,6 +1368,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let gameRunning = false;
         let flappyLoopId = null;
         
+        const flappyBirdImg = new Image();
+        flappyBirdImg.src = 'assets/personaje_1.png';
+        
         const particles = [];
         for(let i=0; i<35; i++){
             particles.push({
@@ -1386,11 +1389,12 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener('resize', resizeFlappy);
         
         const bird = {
-            x: 50, y: 150, width: 34, height: 34,
+            x: 50, y: 150, width: 45, height: 45,
             gravity: 0.4, jump: 7.0, velocity: 0,
             draw: function() {
-                ctx.font = "34px Arial";
-                ctx.fillText("🎧", this.x, this.y + this.height - 4);
+                if (flappyBirdImg.complete) {
+                    ctx.drawImage(flappyBirdImg, this.x, this.y, this.width, this.height);
+                }
             },
             update: function() {
                 this.velocity += this.gravity;
